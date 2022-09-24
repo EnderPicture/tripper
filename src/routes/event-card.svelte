@@ -63,11 +63,10 @@
 		background-color: #222;
 		padding: 0.5rem;
 		width: 10rem;
-		touch-action: 'none';
+    touch-action: none;
 	}
 	article.dragging {
 		opacity: 0;
-		touch-action: 'none';
 	}
 	input {
 		border: none;
@@ -80,7 +79,6 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		touch-action: 'none';
 	}
 	.ghost-body {
 		width: 100%;
