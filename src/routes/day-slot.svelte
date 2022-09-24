@@ -10,9 +10,13 @@
 	$: numberOfHours = (endTime - startTime) / MINUTES_HOUR + 1;
 	$: offsetHours = startTime / MINUTES_HOUR;
 	$: height = (endTime - startTime) * $zoom;
+
+	const onPointerOver = (e: PointerEvent) => {
+		console.log(e.clientX);
+	}
 </script>
 
-<section class="container" style={`height: ${height}px`}>
+<section class="container" style={`height: ${height}px`} on:pointerover={onPointerOver}>
 	<div class="markers">
 		{#each Array(numberOfHours) as _, count}
 			<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>

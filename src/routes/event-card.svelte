@@ -11,6 +11,8 @@
 	let width = 0;
 	let height = 0;
 
+	let ghost: HTMLDivElement;
+
 	const onPointerDown = (e: PointerEvent) => {
 		const box = (e.target as Element)?.getBoundingClientRect();
 		console.log(e.clientX);
@@ -32,8 +34,15 @@
 		pointerDown = false;
 	};
 	const onPointerMove = (e: PointerEvent) => {
-		pointerX = e.clientX;
-		pointerY = e.clientY;
+		if (pointerDown) {
+			pointerX = e.clientX;
+			pointerY = e.clientY;
+
+			// ghost.hidden = true;
+			// let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+			// ghost.hidden = false;
+			// console.log(elemBelow);
+		}
 	};
 
 	$: ghostX = pointerX + offsetX - width / 2;
@@ -48,6 +57,7 @@
 
 {#if pointerDown}
 	<div
+		bind:this={ghost}
 		class="ghost"
 		style={`transform: translate(${ghostX}px, ${ghostY}px); width: ${width}px ;height: ${height}px;`}
 	>
@@ -63,7 +73,7 @@
 		background-color: #222;
 		padding: 0.5rem;
 		width: 10rem;
-    touch-action: none;
+		touch-action: none;
 	}
 	article.dragging {
 		opacity: 0;
@@ -79,6 +89,7 @@
 		position: fixed;
 		top: 0;
 		left: 0;
+		pointer-events: none;
 	}
 	.ghost-body {
 		width: 100%;
