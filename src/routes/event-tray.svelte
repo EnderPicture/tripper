@@ -34,6 +34,7 @@
 		height: 15rem;
 	}
 	.scroll-con {
+		width: fit-content;
 		height: 100%;
 		padding: 0.5rem;
 		display: grid;

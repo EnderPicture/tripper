@@ -15,6 +15,7 @@
 <style>
 	:global(body) {
 		margin: 0;
+		background-color: #000;
 	}
 	:global(*) {
 		box-sizing: border-box;

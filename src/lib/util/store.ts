@@ -1,4 +1,7 @@
+import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
+
+export const MINUTES_HOUR = 60;
 
 export enum Rating {
 	meh = 1,
@@ -24,15 +27,15 @@ export interface IEventBlock {
 export interface IDaySlotData {
 	startTime: number;
 	endTime: number;
-	startEvent?: IEventBlock;
+	startEvent?: IEvent;
 	events: IEventBlock[];
-	endEvent?: IEventBlock;
+	endEvent?: IEvent;
 }
 
 export const daysStore = writable<IDaySlotData[]>([
 	{
-		startTime: 8 * 60,
-		endTime: 20 * 60,
+		startTime: 8 * MINUTES_HOUR,
+		endTime: 20 * MINUTES_HOUR,
 		events: []
 	}
 ]);
