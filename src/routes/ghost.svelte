@@ -17,11 +17,11 @@
 	let width = 0;
 	let height = 0;
 
-	$: $selectedEvent ? onPointerDown($selectedEvent.pointerEvent) : null;
-	const onPointerDown = (e: PointerEvent) => {
-		console.log('hi');
-		const box = (e.target as Element)?.getBoundingClientRect();
+	$: $selectedEvent
+		? onPointerDown($selectedEvent.pointerEvent, $selectedEvent.boundingRect)
+		: null;
 
+	const onPointerDown = (e: PointerEvent, box: DOMRect) => {
 		const cX = box.x + box.width / 2;
 		const cY = box.y + box.height / 2;
 
@@ -55,7 +55,7 @@
 		? $overDaySlotElement.element.getBoundingClientRect().width / 1.1
 		: undefined;
 
-	$: ghostHeight = $overDaySlotElement ? MINUTES_HOUR * $zoom : undefined;
+	$: ghostHeight = $overDaySlotElement ? (MINUTES_HOUR / 1.1) * $zoom : undefined;
 </script>
 
 <svelte:window

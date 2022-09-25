@@ -39,6 +39,7 @@ export interface IDaySlotElement {
 export interface ISelectedEventDown {
 	pointerEvent: PointerEvent;
 	event: IEvent;
+  boundingRect: DOMRect;
 }
 
 export const daysStore = writable<IDaySlotData[]>([

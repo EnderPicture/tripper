@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { MINUTES_HOUR, overDaySlotElement, zoom, type IDaySlotData } from '$lib/util/store';
+	import {
+		MINUTES_HOUR,
+		overDaySlotElement,
+		selectedEvent,
+		zoom,
+		type IDaySlotData
+	} from '$lib/util/store';
 	import { element } from 'svelte/internal';
 	import EventBlock from './event-block.svelte';
 
@@ -22,6 +28,22 @@
 	const onPointerLeave = () => {
 		$overDaySlotElement = null;
 	};
+	const onPointerUp = (e: PointerEvent) => {
+		if ($selectedEvent) {
+			// og event card offset calc, mouse did not click at the center of the card
+			const cY = $selectedEvent.boundingRect.y + $selectedEvent.boundingRect.height / 2;
+			const offsetY = cY - $selectedEvent.pointerEvent.clientY;
+
+			const box = slotElement.getBoundingClientRect();
+			const start = e.clientY - box.y + offsetY - MINUTES_HOUR / 2;
+			const end = start + MINUTES_HOUR;
+
+			dayData.events = [
+				...dayData.events,
+				{ event: $selectedEvent.event, startTime: start, endTime: end }
+			];
+		}
+	};
 </script>
 
 <section
@@ -29,7 +51,7 @@
 	style={`height: ${height}px`}
 	on:pointerenter={onPointerOver}
 	on:pointerleave={onPointerLeave}
-	on:pointermove={onPointerOver}
+	on:pointerup={onPointerUp}
 	bind:this={slotElement}
 >
 	<div class="markers">
@@ -54,6 +76,7 @@
 		display: block;
 		background-image: linear-gradient(0deg, #222 50%, #333 50%);
 		background-size: 1px 120px;
+		max-width: 30rem;
 	}
 	.markers {
 		position: relative;
@@ -71,5 +94,8 @@
 		padding: 0 1rem;
 		background-color: #111;
 		width: 5rem;
+	}
+	.events {
+		position: relative;
 	}
 </style>

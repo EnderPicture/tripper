@@ -2,18 +2,18 @@
 	import { selectedEvent, type IEvent } from '$lib/util/store';
 
 	export let event: IEvent;
+	let thisComp: HTMLElement;
 
 	const onPointerDown = (e: PointerEvent) => {
-		console.log('tests');
 		$selectedEvent = {
 			pointerEvent: e,
-			event
+			event,
+			boundingRect: thisComp.getBoundingClientRect()
 		};
 	};
-
 </script>
 
-<article on:pointerdown|preventDefault={onPointerDown}>
+<article on:pointerdown|preventDefault={onPointerDown} bind:this={thisComp}>
 	<input type="text" bind:value={event.name} size="1" />
 </article>
 
