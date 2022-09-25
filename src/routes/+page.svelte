@@ -1,7 +1,8 @@
 <script>
 	import DaySlot from './day-slot.svelte';
-	import { daysStore, overDaySlotElement } from '$lib/util/store';
+	import { daysStore, overDaySlotElement, selectedEvent } from '$lib/util/store';
 	import EventTray from './event-tray.svelte';
+	import Ghost from './ghost.svelte';
 </script>
 
 <main>
@@ -11,8 +12,11 @@
 
 	<EventTray />
 
-	<!-- <div class="debug">
-	</div> -->
+	<Ghost />
+
+	<div class="debug">
+		{$selectedEvent}
+	</div>
 </main>
 
 <style>

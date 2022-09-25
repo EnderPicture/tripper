@@ -36,6 +36,11 @@ export interface IDaySlotElement {
 	element: Element;
 }
 
+export interface ISelectedEventDown {
+	pointerEvent: PointerEvent;
+	event: IEvent;
+}
+
 export const daysStore = writable<IDaySlotData[]>([
 	{
 		startTime: 8 * MINUTES_HOUR,
@@ -46,3 +51,5 @@ export const daysStore = writable<IDaySlotData[]>([
 export const overDaySlotElement = writable<IDaySlotElement | null>(null);
 export const zoom = writable(1);
 export const eventsStore = writable<IEvent[]>([]);
+
+export const selectedEvent = writable<ISelectedEventDown | null>(null);
