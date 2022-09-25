@@ -31,6 +31,10 @@ export interface IDaySlotData {
 	events: IEventBlock[];
 	endEvent?: IEvent;
 }
+export interface IDaySlotElement {
+	slotData: IDaySlotData;
+	element: Element;
+}
 
 export const daysStore = writable<IDaySlotData[]>([
 	{
@@ -39,5 +43,6 @@ export const daysStore = writable<IDaySlotData[]>([
 		events: []
 	}
 ]);
+export const overDaySlotElement = writable<IDaySlotElement | null>(null);
 export const zoom = writable(1);
 export const eventsStore = writable<IEvent[]>([]);

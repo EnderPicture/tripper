@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { MINUTES_HOUR, zoom, type IDaySlotData } from '$lib/util/store';
+	import { MINUTES_HOUR, overDaySlotElement, zoom, type IDaySlotData } from '$lib/util/store';
+	import { element } from 'svelte/internal';
 	import EventBlock from './event-block.svelte';
 
 	export let dayData: IDaySlotData;
+	let slotElement: HTMLElement;
 
 	$: startTime = dayData.startTime;
 	$: endTime = dayData.endTime;
@@ -12,11 +14,24 @@
 	$: height = (endTime - startTime) * $zoom;
 
 	const onPointerOver = (e: PointerEvent) => {
-		console.log(e.clientX);
-	}
+		$overDaySlotElement = {
+			slotData: dayData,
+			element: slotElement
+		};
+	};
+	const onPointerLeave = () => {
+		$overDaySlotElement = null;
+	};
 </script>
 
-<section class="container" style={`height: ${height}px`} on:pointerover={onPointerOver}>
+<section
+	class="container"
+	style={`height: ${height}px`}
+	on:pointerenter={onPointerOver}
+	on:pointerleave={onPointerLeave}
+	on:pointermove={onPointerOver}
+	bind:this={slotElement}
+>
 	<div class="markers">
 		{#each Array(numberOfHours) as _, count}
 			<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>
