@@ -38,7 +38,7 @@
 			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR;
 
 			const box = slotElement.getBoundingClientRect();
-			const start = e.clientY - box.y - offsetY;
+			const start = dayData.startTime + e.clientY - box.y - offsetY;
 			const end = start + MINUTES_HOUR;
 
 			dayData.events = [
@@ -67,7 +67,7 @@
 	<div class="start" />
 	<div class="events">
 		{#each dayData.events as eventBlock}
-			<EventBlock bind:eventBlock />
+			<EventBlock bind:eventBlock dayStartTime={dayData.startTime} />
 		{/each}
 	</div>
 	<div class="end" />

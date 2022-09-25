@@ -2,8 +2,9 @@
 	import type { IEventBlock } from '$lib/util/store';
 
 	export let eventBlock: IEventBlock;
+  export let dayStartTime: number;
 
-	$: start = eventBlock.startTime;
+	$: start = eventBlock.startTime - dayStartTime;
 	$: height = eventBlock.endTime - eventBlock.startTime;
 </script>
 
