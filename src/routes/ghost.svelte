@@ -17,6 +17,9 @@
 	let width = 0;
 	let height = 0;
 
+	let xCenterPercent = 0;
+	let yCenterPercent = 0;
+
 	$: $selectedEvent
 		? onPointerDown($selectedEvent.pointerEvent, $selectedEvent.boundingRect)
 		: null;
@@ -33,6 +36,12 @@
 
 		width = box.width;
 		height = box.height;
+
+    // whole point of this is so the ghost morphs around the pointer
+		xCenterPercent = ((e.clientX - box.x) / box.width) * 100;
+		yCenterPercent = ((e.clientY - box.y) / box.height) * 100;
+
+		console.log({ xCenterPercent, yCenterPercent });
 
 		(e.target as Element).releasePointerCapture(e.pointerId);
 	};
@@ -71,7 +80,7 @@
 		<div
 			class="ghost-body"
 			class:overSlot={overDaySlot}
-			style={`width: ${ghostWidth}px; height: ${ghostHeight}px`}
+			style={`width: ${ghostWidth}px; height: ${ghostHeight}px; --xCenter: ${xCenterPercent}%; --yCenter: ${yCenterPercent}%`}
 		>
 			<EventCardInner bind:event={$selectedEvent.event} />
 		</div>
@@ -88,8 +97,8 @@
 	}
 	.ghost-body {
 		position: absolute;
-		top: 50%;
-		left: 50%;
+		top: var(--yCenter);
+		left: var(--xCenter);
 		width: 100%;
 		height: 100%;
 		animation-name: ghost-in;
@@ -102,10 +111,10 @@
 	}
 	@keyframes ghost-in {
 		0% {
-			transform: translate(-50%, -50%) scale(1);
+			transform: translate(calc(-1 * var(--xCenter)), calc(-1 * var(--yCenter))) scale(1);
 		}
 		100% {
-			transform: translate(-50%, -50%) scale(1.1);
+			transform: translate(calc(-1 * var(--xCenter)), calc(-1 * var(--yCenter))) scale(1.1);
 		}
 	}
 </style>

@@ -31,11 +31,14 @@
 	const onPointerUp = (e: PointerEvent) => {
 		if ($selectedEvent) {
 			// og event card offset calc, mouse did not click at the center of the card
-			const cY = $selectedEvent.boundingRect.y + $selectedEvent.boundingRect.height / 2;
-			const offsetY = cY - $selectedEvent.pointerEvent.clientY;
+			const yCenterPercent =
+				(($selectedEvent.pointerEvent.clientY - $selectedEvent.boundingRect.y) /
+					$selectedEvent.boundingRect.height) *
+				100;
+			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR;
 
 			const box = slotElement.getBoundingClientRect();
-			const start = e.clientY - box.y + offsetY - MINUTES_HOUR / 2;
+			const start = e.clientY - box.y - offsetY;
 			const end = start + MINUTES_HOUR;
 
 			dayData.events = [
