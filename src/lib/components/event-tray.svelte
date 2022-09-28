@@ -1,5 +1,5 @@
 <script lang="ts">
-	import EventCard from './event-card.svelte';
+	import EventCard from '$lib/components/event-card.svelte';
 	import { events, Rating } from '$lib/store';
 	import { uuid } from '$lib/util';
 

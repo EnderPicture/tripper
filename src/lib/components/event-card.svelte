@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { events, idToI, selectedEvent, type IEvent, type IEventID } from '$lib/store';
-	import EventCardInner from './event-card-inner.svelte';
+	import EventCardInner from '$lib/components/event-card-inner.svelte';
 
 	export let eventId: IEventID;
 

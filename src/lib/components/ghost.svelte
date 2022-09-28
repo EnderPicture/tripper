@@ -8,7 +8,7 @@
 		events,
 		idToI
 	} from '$lib/store';
-	import EventCardInner from './event-card-inner.svelte';
+	import EventCardInner from '$lib/components/event-card-inner.svelte';
 
 	let overDaySlot = false;
 

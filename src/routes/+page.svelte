@@ -1,9 +1,9 @@
 <script>
-	import DaySlot from './day-slot.svelte';
+	import DaySlot from '$lib/components/day-slot.svelte';
 	import { events, expandedEvent, idToI, itineraries, selectedEvent } from '$lib/store';
-	import EventTray from './event-tray.svelte';
-	import Ghost from './ghost.svelte';
-	import ExpandedEvent from './expanded-event.svelte';
+	import EventTray from '$lib/components/event-tray.svelte';
+	import Ghost from '$lib/components/ghost.svelte';
+	import ExpandedEvent from '$lib/components/expanded-event.svelte';
 </script>
 
 <main>

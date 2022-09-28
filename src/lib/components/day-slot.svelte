@@ -9,7 +9,7 @@
 		type IItinerary
 	} from '$lib/store';
 	import { element } from 'svelte/internal';
-	import EventBlock from './event-block.svelte';
+	import EventBlock from '$lib/components/event-block.svelte';
 
 	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
