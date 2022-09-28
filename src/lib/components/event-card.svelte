@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { events, idToI, selectedEvent, type IEvent, type IEventID } from '$lib/store';
+	import { events, idToI, draggedEvent, type IEvent, type IEventID } from '$lib/store';
 	import EventCardInner from '$lib/components/event-card-inner.svelte';
 
 	export let eventId: IEventID;
 
-	$: dragging = $selectedEvent?.eventId === eventId;
+	$: dragging = $draggedEvent?.eventId === eventId;
 </script>
 
 <div class:dragging>

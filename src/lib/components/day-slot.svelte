@@ -4,7 +4,7 @@
 		idToI,
 		MINUTES_HOUR,
 		overDaySlotElement,
-		selectedEvent,
+		draggedEvent,
 		zoom,
 		type IItinerary
 	} from '$lib/store';
@@ -31,11 +31,11 @@
 		$overDaySlotElement = null;
 	};
 	const onPointerUp = (e: PointerEvent) => {
-		if ($selectedEvent) {
+		if ($draggedEvent) {
 			// og event card offset calc, mouse did not click at the center of the card
 			const yCenterPercent =
-				(($selectedEvent.pointerEvent.clientY - $selectedEvent.boundingRect.y) /
-					$selectedEvent.boundingRect.height) *
+				(($draggedEvent.pointerEvent.clientY - $draggedEvent.boundingRect.y) /
+					$draggedEvent.boundingRect.height) *
 				100;
 			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR;
 
@@ -43,11 +43,11 @@
 			const start = itinerary.startTime + e.clientY - box.y - offsetY;
 			const end = start + MINUTES_HOUR;
 
-			$events[$idToI[$selectedEvent.eventId]].plan = {
+			$events[$idToI[$draggedEvent.eventId]].plan = {
 				startTime: start,
 				endTime: end
 			};
-			itinerary.eventIds = [...itinerary.eventIds, $selectedEvent.eventId];
+			itinerary.eventIds = [...itinerary.eventIds, $draggedEvent.eventId];
 		}
 	};
 </script>

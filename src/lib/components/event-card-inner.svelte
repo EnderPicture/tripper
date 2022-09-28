@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { events, expandedEvent, selectedEvent, type IEvent, type IEventID } from '$lib/store';
+	import { events, expandedEvent, draggedEvent, type IEvent, type IEventID } from '$lib/store';
 
 	export let event: IEvent;
 	let thisComp: HTMLElement;
 
 
 	const onPointerDown = (e: PointerEvent) => {
-		$selectedEvent = {
+		$draggedEvent = {
 			pointerEvent: e,
 			eventId: event.id,
 			boundingRect: thisComp.getBoundingClientRect()

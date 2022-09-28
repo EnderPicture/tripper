@@ -51,13 +51,13 @@ export const itineraries = writable<IItinerary[]>([
 export const overDaySlotElement = writable<IDaySlotElement | null>(null);
 export const zoom = writable(1);
 
-export interface ISelectedEventDown {
+export interface IDraggedEvent {
 	pointerEvent: PointerEvent;
 	eventId: IEventID;
 	boundingRect: DOMRect;
 }
 
-export const selectedEvent = writable<ISelectedEventDown | null>(null);
+export const draggedEvent = writable<IDraggedEvent | null>(null);
 export const expandedEvent = writable<IEventID | null>(null);
 
 type IIDToIndexMapItem = { [key: IEventID]: number };

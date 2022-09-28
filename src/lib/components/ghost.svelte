@@ -3,7 +3,7 @@
 		MINUTES_HOUR,
 		zoom,
 		overDaySlotElement,
-		selectedEvent,
+		draggedEvent,
 		type IEvent,
 		events,
 		idToI
@@ -22,8 +22,8 @@
 	let xCenterPercent = 0;
 	let yCenterPercent = 0;
 
-	$: $selectedEvent
-		? onPointerDown($selectedEvent.pointerEvent, $selectedEvent.boundingRect)
+	$: $draggedEvent
+		? onPointerDown($draggedEvent.pointerEvent, $draggedEvent.boundingRect)
 		: null;
 
 	const onPointerDown = (e: PointerEvent, box: DOMRect) => {
@@ -48,11 +48,11 @@
 		(e.target as Element).releasePointerCapture(e.pointerId);
 	};
 	const onPointerUp = () => {
-		$selectedEvent = null;
+		$draggedEvent = null;
 		overDaySlot = false;
 	};
 	const onPointerMove = (e: PointerEvent) => {
-		if ($selectedEvent) {
+		if ($draggedEvent) {
 			pointerX = e.clientX;
 			pointerY = e.clientY;
 			overDaySlot = $overDaySlotElement !== null;
@@ -74,7 +74,7 @@
 	on:pointermove|preventDefault={onPointerMove}
 />
 
-{#if $selectedEvent}
+{#if $draggedEvent}
 	<div
 		class="ghost"
 		style={`transform: translate(${ghostX}px, ${ghostY}px); width: ${width}px ;height: ${height}px;`}
@@ -84,7 +84,7 @@
 			class:overSlot={overDaySlot}
 			style={`width: ${ghostWidth}px; height: ${ghostHeight}px; --xCenter: ${xCenterPercent}%; --yCenter: ${yCenterPercent}%`}
 		>
-			<EventCardInner bind:event={$events[$idToI[$selectedEvent.eventId]]} />
+			<EventCardInner bind:event={$events[$idToI[$draggedEvent.eventId]]} />
 		</div>
 	</div>
 {/if}
