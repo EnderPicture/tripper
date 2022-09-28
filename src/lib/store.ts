@@ -16,6 +16,7 @@ export interface IEvent {
 	name: string;
 	rating: Rating;
 	location: {
+		name: string;
 		lat: number;
 		lon: number;
 	} | null;
