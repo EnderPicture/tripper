@@ -5,7 +5,8 @@
 		overDaySlotElement,
 		selectedEvent,
 		type IEvent,
-		events
+		events,
+		idToI
 	} from '$lib/store';
 	import EventCardInner from './event-card-inner.svelte';
 
@@ -66,8 +67,6 @@
 		: undefined;
 
 	$: ghostHeight = $overDaySlotElement ? (MINUTES_HOUR / 1.1) * $zoom : undefined;
-
-	$: eventIndex = $events.findIndex((e) => e.id === $selectedEvent?.eventId);
 </script>
 
 <svelte:window
@@ -75,7 +74,7 @@
 	on:pointermove|preventDefault={onPointerMove}
 />
 
-{#if $selectedEvent && eventIndex >= 0}
+{#if $selectedEvent}
 	<div
 		class="ghost"
 		style={`transform: translate(${ghostX}px, ${ghostY}px); width: ${width}px ;height: ${height}px;`}
@@ -85,7 +84,7 @@
 			class:overSlot={overDaySlot}
 			style={`width: ${ghostWidth}px; height: ${ghostHeight}px; --xCenter: ${xCenterPercent}%; --yCenter: ${yCenterPercent}%`}
 		>
-			<EventCardInner bind:event={$events[eventIndex]} />
+			<EventCardInner bind:event={$events[$idToI[$selectedEvent.eventId]]} />
 		</div>
 	</div>
 {/if}

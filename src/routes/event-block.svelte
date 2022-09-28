@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { events, type IEventID } from '$lib/store';
+	import type { IEvent } from '$lib/store';
 	import { end_hydrating } from 'svelte/internal';
 
-	export let eventId: IEventID;
+	export let event: IEvent;
 	export let dayStartTime: number;
-
-	$: event = $events.find((e) => e.id === eventId);
 
 	$: startTime = event?.plan?.startTime ?? 0;
 	$: endTime = event?.plan?.endTime ?? 0;

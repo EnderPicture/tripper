@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		events,
+		idToI,
 		MINUTES_HOUR,
 		overDaySlotElement,
 		selectedEvent,
@@ -42,15 +43,11 @@
 			const start = itinerary.startTime + e.clientY - box.y - offsetY;
 			const end = start + MINUTES_HOUR;
 
-			const eventIndex = $events.findIndex((e) => e.id === $selectedEvent?.eventId);
-
-			if (eventIndex >= 0) {
-				$events[eventIndex].plan = {
-					startTime: start,
-					endTime: end
-				};
-				itinerary.eventIds = [...itinerary.eventIds, $selectedEvent.eventId];
-			}
+			$events[$idToI[$selectedEvent.eventId]].plan = {
+				startTime: start,
+				endTime: end
+			};
+			itinerary.eventIds = [...itinerary.eventIds, $selectedEvent.eventId];
 		}
 	};
 </script>
@@ -73,7 +70,7 @@
 	<div class="start" />
 	<div class="events">
 		{#each itinerary.eventIds as eventId}
-			<EventBlock bind:eventId dayStartTime={itinerary.startTime} />
+			<EventBlock bind:event={$events[$idToI[eventId]]} dayStartTime={itinerary.startTime} />
 		{/each}
 	</div>
 	<div class="end" />
