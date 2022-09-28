@@ -1,19 +1,28 @@
 <script lang="ts">
-	import type { IEventBlock } from '$lib/util/store';
+	import { events, type IEventID } from '$lib/store';
+	import { end_hydrating } from 'svelte/internal';
 
-	export let eventBlock: IEventBlock;
-  export let dayStartTime: number;
+	export let eventId: IEventID;
+	export let dayStartTime: number;
 
-	$: start = eventBlock.startTime - dayStartTime;
-	$: height = eventBlock.endTime - eventBlock.startTime;
+	$: event = $events.find((e) => e.id === eventId);
+
+	$: startTime = event?.plan?.startTime ?? 0;
+	$: endTime = event?.plan?.endTime ?? 0;
+
+	$: start = startTime - dayStartTime;
+	$: height = endTime - startTime;
 </script>
 
-<article style={`transform: translateY(${start}px); height: ${height}px`}>
-	<p>this is a thing</p>
-	<p>
-		{eventBlock.event.name}
-	</p>
-</article>
+{#if event}
+	<article style={`transform: translateY(${start}px); height: ${height}px`}>
+		<p>this is a thing</p>
+		<input bind:value={event.name} />
+		<p>
+			{event.name}
+		</p>
+	</article>
+{/if}
 
 <style>
 	article {
@@ -21,5 +30,6 @@
 		top: 0;
 		left: 0;
 		background-color: red;
+		width: 100%;
 	}
 </style>

@@ -1,14 +1,19 @@
 <script lang="ts">
-	import { selectedEvent, type IEvent } from '$lib/util/store';
+	import { events, selectedEvent, type IEvent, type IEventID } from '$lib/store';
 	import EventCardInner from './event-card-inner.svelte';
 
-	export let event: IEvent;
-	$: dragging = $selectedEvent?.event === event;
+	export let eventId: IEventID;
+
+	$: dragging = $selectedEvent?.eventId === eventId;
+
+	$: eventIndex = $events.findIndex((e) => e.id === eventId);
 </script>
 
-<div class:dragging>
-	<EventCardInner bind:event />
-</div>
+{#if eventIndex >= 0}
+	<div class:dragging>
+		<EventCardInner bind:event={$events[eventIndex]} />
+	</div>
+{/if}
 
 <style>
 	div {

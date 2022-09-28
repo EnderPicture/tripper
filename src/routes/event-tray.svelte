@@ -1,13 +1,16 @@
 <script lang="ts">
 	import EventCard from './event-card.svelte';
-	import { eventsStore, Rating } from '$lib/util/store';
+	import { events, Rating } from '$lib/store';
+	import { uuid } from '$lib/util';
 
 	const onAdd = () => {
-		eventsStore.update((events) => {
+		events.update((events) => {
 			events.push({
+				id: uuid(),
 				name: '',
 				rating: Rating.meh,
-				location: null
+				location: null,
+				plan: null
 			});
 			return events;
 		});
@@ -16,8 +19,8 @@
 
 <section class="event-tray">
 	<div class="scroll-con">
-		{#each $eventsStore as event}
-			<EventCard bind:event />
+		{#each $events as event}
+			<EventCard bind:eventId={event.id} />
 		{/each}
 		<button on:click={onAdd}>add new event</button>
 	</div>

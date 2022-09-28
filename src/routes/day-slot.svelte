@@ -1,19 +1,20 @@
 <script lang="ts">
 	import {
+		events,
 		MINUTES_HOUR,
 		overDaySlotElement,
 		selectedEvent,
 		zoom,
-		type IDaySlotData
-	} from '$lib/util/store';
+		type IItinerary
+	} from '$lib/store';
 	import { element } from 'svelte/internal';
 	import EventBlock from './event-block.svelte';
 
-	export let dayData: IDaySlotData;
+	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
 
-	$: startTime = dayData.startTime;
-	$: endTime = dayData.endTime;
+	$: startTime = itinerary.startTime;
+	$: endTime = itinerary.endTime;
 
 	$: numberOfHours = (endTime - startTime) / MINUTES_HOUR + 1;
 	$: offsetHours = startTime / MINUTES_HOUR;
@@ -21,7 +22,7 @@
 
 	const onPointerOver = (e: PointerEvent) => {
 		$overDaySlotElement = {
-			slotData: dayData,
+			slotData: itinerary,
 			element: slotElement
 		};
 	};
@@ -38,13 +39,18 @@
 			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR;
 
 			const box = slotElement.getBoundingClientRect();
-			const start = dayData.startTime + e.clientY - box.y - offsetY;
+			const start = itinerary.startTime + e.clientY - box.y - offsetY;
 			const end = start + MINUTES_HOUR;
 
-			dayData.events = [
-				...dayData.events,
-				{ event: $selectedEvent.event, startTime: start, endTime: end }
-			];
+			const eventIndex = $events.findIndex((e) => e.id === $selectedEvent?.eventId);
+
+			if (eventIndex >= 0) {
+				$events[eventIndex].plan = {
+					startTime: start,
+					endTime: end
+				};
+				itinerary.eventIds = [...itinerary.eventIds, $selectedEvent.eventId];
+			}
 		}
 	};
 </script>
@@ -66,8 +72,8 @@
 	</div>
 	<div class="start" />
 	<div class="events">
-		{#each dayData.events as eventBlock}
-			<EventBlock bind:eventBlock dayStartTime={dayData.startTime} />
+		{#each itinerary.eventIds as eventId}
+			<EventBlock bind:eventId dayStartTime={itinerary.startTime} />
 		{/each}
 	</div>
 	<div class="end" />

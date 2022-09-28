@@ -1,18 +1,23 @@
 <script>
 	import DaySlot from './day-slot.svelte';
-	import { daysStore, overDaySlotElement, selectedEvent } from '$lib/util/store';
+	import { events, expandedEvent, idToI, itineraries, selectedEvent } from '$lib/store';
 	import EventTray from './event-tray.svelte';
 	import Ghost from './ghost.svelte';
+	import ExpandedEvent from './expanded-event.svelte';
 </script>
 
 <main>
-	{#each $daysStore as dayData}
-		<DaySlot bind:dayData />
+	{#each $itineraries as itinerary}
+		<DaySlot bind:itinerary />
 	{/each}
 
 	<EventTray />
 
 	<Ghost />
+
+	{#if $expandedEvent}
+		<ExpandedEvent bind:event={$events[$idToI[$expandedEvent]]} />
+	{/if}
 
 	<div class="debug">
 		{$selectedEvent}
