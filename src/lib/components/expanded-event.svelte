@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { expandedEvent, type IEvent } from '$lib/store';
+	import LocationSelector from './location-selector.svelte';
 
 	export let event: IEvent;
+	$: console.log(event);
 </script>
 
 <section />
 <div class="event">
 	<input type="text" bind:value={event.name} />
+	<LocationSelector bind:location={event.location} />
 	<button on:click={() => ($expandedEvent = null)}>exit</button>
 </div>
 

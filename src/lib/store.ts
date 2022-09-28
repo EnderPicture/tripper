@@ -17,8 +17,8 @@ export interface IEvent {
 	rating: Rating;
 	location: {
 		name: string;
-		lat: number;
-		lon: number;
+		lat: number | null;
+		lon: number | null;
 	} | null;
 	plan: {
 		startTime: number | null;
