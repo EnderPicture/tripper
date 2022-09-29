@@ -3,17 +3,20 @@
 	import LocationSelector from './location-selector.svelte';
 
 	export let event: IEvent;
+	const onClose = () => {
+		$expandedEvent = null;
+	};
 </script>
 
-<section />
+<div class="backdrop" on:click={onClose} />
 <div class="event">
 	<input type="text" bind:value={event.name} />
 	<LocationSelector bind:location={event.location} />
-	<button on:click={() => ($expandedEvent = null)}>exit</button>
+	<button on:click={onClose}>exit</button>
 </div>
 
 <style>
-	section {
+	.backdrop {
 		position: fixed;
 		top: 0;
 		left: 0;
