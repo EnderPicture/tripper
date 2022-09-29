@@ -10,8 +10,7 @@
 	$: if (input !== '') {
 		location = {
 			name: input.trim(),
-			lat: location?.lat ?? null,
-			lon: location?.lon ?? null
+			cords: location?.cords ?? null
 		};
 	} else {
 		location = null;
@@ -30,8 +29,10 @@
 		if (selected) {
 			location = {
 				name: selected.properties.name,
-				lat: selected.geometry.coordinates[1],
-				lon: selected.geometry.coordinates[0]
+				cords: {
+					lat: selected.geometry.coordinates[1],
+					lon: selected.geometry.coordinates[0]
+				}
 			};
 			input = location.name;
 			jsonLocationList = null;
@@ -44,6 +45,8 @@
 		<input type="text" bind:value={input} placeholder="location" size="1" />
 		<button>search</button>
 	</form>
+	{location?.cords?.lat ?? ''}
+	{location?.cords?.lon ?? ''}
 	{#if jsonLocationList}
 		<div class="location-list">
 			{#each jsonLocationList.features as feature, index}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { events, idToI, draggedEvent, type IEvent, type IEventID } from '$lib/store';
+	import { events, eIdToI, draggedEvent, type IEvent, type IEventID } from '$lib/store';
 	import EventCardInner from '$lib/components/event-card-inner.svelte';
 
 	export let eventId: IEventID;
@@ -8,7 +8,7 @@
 </script>
 
 <div class:dragging>
-	<EventCardInner bind:event={$events[$idToI[eventId]]} />
+	<EventCardInner bind:event={$events[$eIdToI[eventId]]} />
 </div>
 
 <style>

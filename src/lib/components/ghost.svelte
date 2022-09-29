@@ -6,7 +6,7 @@
 		draggedEvent,
 		type IEvent,
 		events,
-		idToI
+		eIdToI
 	} from '$lib/store';
 	import EventCardInner from '$lib/components/event-card-inner.svelte';
 
@@ -84,7 +84,7 @@
 			class:overSlot={overDaySlot}
 			style={`width: ${ghostWidth}px; height: ${ghostHeight}px; --xCenter: ${xCenterPercent}%; --yCenter: ${yCenterPercent}%`}
 		>
-			<EventCardInner bind:event={$events[$idToI[$draggedEvent.eventId]]} />
+			<EventCardInner bind:event={$events[$eIdToI[$draggedEvent.eventId]]} />
 		</div>
 	</div>
 {/if}

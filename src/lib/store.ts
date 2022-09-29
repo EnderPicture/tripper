@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
+import { uuid } from './util';
 
 export const MINUTES_HOUR = 60;
 
@@ -10,6 +11,7 @@ export enum Rating {
 }
 
 export type IEventID = string;
+export type IItineraryID = string;
 
 export interface IEvent {
 	id: IEventID;
@@ -17,16 +19,20 @@ export interface IEvent {
 	rating: Rating;
 	location: {
 		name: string;
-		lat: number | null;
-		lon: number | null;
+		cords: {
+			lat: number;
+			lon: number;
+		} | null;
 	} | null;
 	plan: {
-		startTime: number | null;
-		endTime: number | null;
+		itineraryId: IItineraryID;
+		startTime: number;
+		endTime: number;
 	} | null;
 }
 
 export interface IItinerary {
+	id: IItineraryID;
 	startTime: number;
 	endTime: number;
 	startEvent?: IEventID;
@@ -42,6 +48,7 @@ export interface IDaySlotElement {
 export const events = writable<IEvent[]>([]);
 export const itineraries = writable<IItinerary[]>([
 	{
+		id: uuid(),
 		startTime: 8 * MINUTES_HOUR,
 		endTime: 20 * MINUTES_HOUR,
 		eventIds: []
@@ -60,13 +67,24 @@ export interface IDraggedEvent {
 export const draggedEvent = writable<IDraggedEvent | null>(null);
 export const expandedEvent = writable<IEventID | null>(null);
 
-type IIDToIndexMapItem = { [key: IEventID]: number };
-export const idToI = writable<IIDToIndexMapItem>({});
+type IEventIDToIndexMapItem = { [key: IEventID]: number };
+export const eIdToI = writable<IEventIDToIndexMapItem>({});
 events.subscribe((events) => {
-	idToI.update(() =>
+	eIdToI.update(() =>
 		events.reduce((map, event, index) => {
 			map[event.id] = index;
 			return map;
-		}, {} as IIDToIndexMapItem)
+		}, {} as IEventIDToIndexMapItem)
+	);
+});
+
+type IItineraryIDToIndexMapItem = { [key: IEventID]: number };
+export const iIdToI = writable<IItineraryIDToIndexMapItem>({});
+itineraries.subscribe((itineraries) => {
+	iIdToI.update(() =>
+		itineraries.reduce((map, itinerary, index) => {
+			map[itinerary.id] = index;
+			return map;
+		}, {} as IItineraryIDToIndexMapItem)
 	);
 });

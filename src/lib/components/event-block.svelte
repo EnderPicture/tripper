@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IEvent } from '$lib/store';
+	import { expandedEvent, type IEvent } from '$lib/store';
 	import { end_hydrating } from 'svelte/internal';
 
 	export let event: IEvent;
@@ -10,15 +10,17 @@
 
 	$: start = startTime - dayStartTime;
 	$: height = endTime - startTime;
+
+	const onClick = () => {
+		$expandedEvent = event.id;
+	}
 </script>
 
 {#if event}
 	<article style={`transform: translateY(${start}px); height: ${height}px`}>
-		<p>this is a thing</p>
-		<input bind:value={event.name} />
-		<p>
-			{event.name}
-		</p>
+		<p>{event.name}</p>
+		<p>{event.location?.name}</p>
+		<button on:click={onClick}>expand</button>
 	</article>
 {/if}
 

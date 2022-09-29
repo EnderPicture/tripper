@@ -1,6 +1,6 @@
 <script>
 	import DaySlot from '$lib/components/day-slot.svelte';
-	import { events, expandedEvent, idToI, itineraries, draggedEvent } from '$lib/store';
+	import { events, expandedEvent, eIdToI, itineraries, draggedEvent } from '$lib/store';
 	import EventTray from '$lib/components/event-tray.svelte';
 	import Ghost from '$lib/components/ghost.svelte';
 	import ExpandedEvent from '$lib/components/expanded-event.svelte';
@@ -16,7 +16,7 @@
 	<Ghost />
 
 	{#if $expandedEvent}
-		<ExpandedEvent bind:event={$events[$idToI[$expandedEvent]]} />
+		<ExpandedEvent bind:event={$events[$eIdToI[$expandedEvent]]} />
 	{/if}
 
 	<div class="debug">

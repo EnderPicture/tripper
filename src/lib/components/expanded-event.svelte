@@ -3,7 +3,6 @@
 	import LocationSelector from './location-selector.svelte';
 
 	export let event: IEvent;
-	$: console.log(event);
 </script>
 
 <section />
