@@ -13,6 +13,20 @@ export enum Rating {
 export type IEventID = string;
 export type IItineraryID = string;
 
+export interface ISimpleEvent {
+	start: number;
+	end: number;
+	eventId: IEventID;
+	cords: { lat: number; lon: number } | null;
+}
+
+export interface ITravelTime {
+	startEventId: IEventID;
+	endEventId: IEventID;
+	duration: number;
+	distance: number;
+}
+
 export interface IEvent {
 	id: IEventID;
 	name: string;

@@ -14,3 +14,7 @@ export const uuid = () => {
 export function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export const getCenter = (start: number, end: number) => {
+	return start + (end - start) / 2;
+};

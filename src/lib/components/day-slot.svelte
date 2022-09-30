@@ -8,21 +8,20 @@
 		zoom,
 		type IItinerary,
 		type IEvent,
-		type IEventID
+		type IEventID,
+		type ISimpleEvent,
+		type ITravelTime
 	} from '$lib/store';
 	import EventBlock from '$lib/components/event-block.svelte';
 	import { identity } from 'svelte/internal';
 	import { sleep } from '$lib/util';
 	import type { RouteResponse } from '$lib/api-types/routing';
+	import TravelTime from './travel-time.svelte';
 
 	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
 
-	let travelTime: {
-		startEventId: IEventID;
-		endEventId: IEventID;
-		duration: number;
-	}[] = [];
+	let travelTimes: ITravelTime[] = [];
 
 	$: startTime = itinerary.startTime;
 	$: endTime = itinerary.endTime;
@@ -65,13 +64,6 @@
 		}
 	};
 
-	interface ISimpleEvent {
-		start: number;
-		end: number;
-		eventId: IEventID;
-		cords: { lat: number; lon: number } | null;
-	}
-
 	const calcTravelTime = () => {
 		const simpleEvents = itinerary.eventIds
 			.reduce((locTiming, id) => {
@@ -89,9 +81,10 @@
 			}, [] as ISimpleEvent[])
 			.sort((a, b) => a.start + (a.end - a.start) / 2 - b.start + (b.end - b.start) / 2);
 
-		const fetchData = async (events: ISimpleEvent[]) => {
-			travelTime = [];
-			
+		const fetchRoute = async (events: ISimpleEvent[]) => {
+			// TODO: use cache if got it
+			travelTimes = [];
+
 			for (let i = 0; i < events.length - 1; i++) {
 				const eventA = events[i];
 				const eventB = events[i + 1];
@@ -101,22 +94,23 @@
 						`https://routing.openstreetmap.de/routed-car/route/v1/driving/${eventA.cords.lon},${eventA.cords.lat};${eventB.cords.lon},${eventB.cords.lat}`
 					);
 					const json = (await res.json()) as RouteResponse;
-					travelTime.push({
+					travelTimes.push({
 						startEventId: eventA.eventId,
 						endEventId: eventB.eventId,
-						duration: json.routes[0].duration
+						duration: json.routes[0].duration,
+						distance: json.routes[0].distance
 					});
-					travelTime = travelTime;
+					travelTimes = travelTimes;
 				}
 
 				await sleep(1000);
 			}
 		};
 
-		fetchData(simpleEvents);
+		fetchRoute(simpleEvents);
 	};
 
-	$: console.log(travelTime);
+	$: console.log(travelTimes);
 </script>
 
 <section>
@@ -142,6 +136,7 @@
 				<EventBlock bind:event={$events[$eIdToI[eventId]]} dayStartTime={itinerary.startTime} />
 			{/each}
 		</div>
+		<TravelTime bind:travelTimes {itinerary} />
 	</div>
 	<div class="end" />
 </section>
