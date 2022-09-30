@@ -20,7 +20,11 @@
 {#if event}
 	<article bind:this={thisComp}>
 		<div class="inner">
-			<div class="drag-tag" on:pointerdown|preventDefault={onPointerDown} />
+			<div class="drag-tag" on:pointerdown|preventDefault={onPointerDown}>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
 			<input type="text" bind:value={event.name} size="1" />
 			<button on:click={onExpand}>expand</button>
 		</div>
@@ -31,7 +35,8 @@
 	article {
 		width: 100%;
 		height: 100%;
-		padding-top: 2rem;
+		padding-top: var(--tag-height);
+		--tag-height: 3rem;
 	}
 	.inner {
 		background-color: #222;
@@ -49,11 +54,15 @@
 	}
 	.drag-tag {
 		width: 2rem;
-		height: 2rem;
+		height: var(--tag-height);
 		background-color: #444;
 		touch-action: none;
 		position: absolute;
 		bottom: 100%;
 		left: 0;
+		
+	}
+	.drag-tag > div {
+
 	}
 </style>

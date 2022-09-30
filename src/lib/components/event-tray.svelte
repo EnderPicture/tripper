@@ -18,11 +18,12 @@
 </script>
 
 <section class="event-tray">
+	<div class="background"></div>
 	<div class="scroll-con">
 		{#each $events as event}
 			<EventCard bind:eventId={event.id} />
 		{/each}
-		<button on:click={onAdd}>add new event</button>
+		<button class="add" on:click={onAdd}>add new event</button>
 	</div>
 </section>
 
@@ -33,8 +34,7 @@
 		left: 0;
 		width: 100%;
 		overflow-x: auto;
-		background-color: #111;
-		height: 15rem;
+		height: 18rem;
 	}
 	.scroll-con {
 		width: fit-content;
@@ -43,5 +43,13 @@
 		display: grid;
 		grid-auto-flow: column;
 		gap: 0.5rem;
+	}
+	.background {
+		position: absolute;
+		bottom: 0;
+		background-color: #111;
+		width: 100%;
+		height: calc(100% - 3rem);
+		z-index: -1;
 	}
 </style>

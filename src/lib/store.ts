@@ -81,6 +81,7 @@ export interface IDraggedEvent {
 export const draggedEvent = writable<IDraggedEvent | null>(null);
 export const expandedEvent = writable<IEventID | null>(null);
 
+// dynamic id mapper
 type IEventIDToIndexMapItem = { [key: IEventID]: number };
 export const eIdToI = writable<IEventIDToIndexMapItem>({});
 events.subscribe((events) => {

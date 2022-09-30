@@ -7,13 +7,13 @@
 
 	let startTime = 0;
 	let endTime = 0;
-	let duration = 0;
+	let durationMins = 0;
 
 	$: {
 		const startPlan = $events[$eIdToI[travelTime.startEventId]].plan;
 		const endPlan = $events[$eIdToI[travelTime.endEventId]].plan;
 
-		const durationMins = travelTime.duration / 60;
+		durationMins = travelTime.duration / 60;
 
 		if (startPlan && endPlan) {
 			const startFreeTime = startPlan.endTime - itinerary.startTime;
@@ -23,24 +23,24 @@
 			const half = durationMins / 2;
 			startTime = center - half;
 			endTime = center + half;
-			duration = durationMins;
-
-      console.log({ startFreeTime, endFreeTime, duration });
 		}
 	}
 </script>
 
-<div class="travel-block" style={`transform: translateY(${startTime}px); height: ${duration}px`}>
-  <p>{duration/60} hours</p>
-	<p>{travelTime.distance/1000} km</p>
+<div
+	class="travel-block"
+	style={`transform: translateY(${startTime}px); height: ${durationMins}px`}
+>
+	<p>{durationMins / 60} hours</p>
+	<p>{travelTime.distance / 1000} km</p>
 </div>
 
 <style>
 	.travel-block {
-    position: absolute;
-    top: 0;
-    left: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
 		background-color: rebeccapurple;
-    transition: .2s ease;
+		transition: 0.2s ease;
 	}
 </style>
