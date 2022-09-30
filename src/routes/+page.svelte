@@ -24,7 +24,7 @@
 	</div>
 </main>
 
-<style>
+<style lang="scss">
 	.debug {
 		position: fixed;
 		top: 0;
@@ -33,10 +33,11 @@
 	}
 	:global(body) {
 		margin: 0;
-		background-color: #000;
+		background-color: $color1;
 	}
 	:global(*) {
 		box-sizing: border-box;
+		font-family: 'Montserrat', sans-serif;
 	}
 	main {
 		padding-bottom: 15rem;

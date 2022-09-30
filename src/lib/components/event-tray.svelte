@@ -27,7 +27,7 @@
 	</div>
 </section>
 
-<style>
+<style lang="scss">
 	.event-tray {
 		position: fixed;
 		bottom: 0;
@@ -47,9 +47,17 @@
 	.background {
 		position: absolute;
 		bottom: 0;
-		background-color: #111;
+		background-color: $color2;
 		width: 100%;
-		height: calc(100% - 3rem);
+		height: calc(100% - 2rem);
 		z-index: -1;
+		box-shadow: 0 0 20px #0001;
+	}
+	.add {
+		background-color: $color2;
+		border: none;
+		margin-top: 3rem;
+		color: $color5;
+		border-radius: .5rem;
 	}
 </style>
