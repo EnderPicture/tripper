@@ -25,6 +25,10 @@
 </main>
 
 <style lang="scss">
+	main {
+		display: flex;
+		justify-content: center;
+	}
 	.debug {
 		position: fixed;
 		top: 0;

@@ -114,42 +114,56 @@
 </script>
 
 <section>
-	<button on:click={calcTravelTime}>show travel time</button>
-	<div class="start" />
-	<div
-		class="container"
-		style={`height: ${height}px`}
-		on:pointerenter={onPointerOver}
-		on:pointerleave={onPointerLeave}
-		on:pointerup={onPointerUp}
-		bind:this={slotElement}
-	>
-		<div class="markers">
-			{#each Array(numberOfHours) as _, count}
-				<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>
-					{offsetHours + count}:00
-				</p>
-			{/each}
+	<div class="main">
+		<div class="start">
+			<p>start</p>
+			<button on:click={calcTravelTime}>show travel time</button>
 		</div>
-		<div class="events">
-			{#each itinerary.eventIds as eventId}
-				<EventBlock bind:event={$events[$eIdToI[eventId]]} dayStartTime={itinerary.startTime} />
-			{/each}
+		<div
+			class="container"
+			style={`height: ${height}px`}
+			on:pointerenter={onPointerOver}
+			on:pointerleave={onPointerLeave}
+			on:pointerup={onPointerUp}
+			bind:this={slotElement}
+		>
+			<div class="events">
+				{#each itinerary.eventIds as eventId}
+					<EventBlock bind:event={$events[$eIdToI[eventId]]} dayStartTime={itinerary.startTime} />
+				{/each}
+			</div>
+			<TravelTime bind:travelTimes {itinerary} />
+			<div class="markers">
+				{#each Array(numberOfHours) as _, count}
+					<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>
+						{offsetHours + count}
+					</p>
+				{/each}
+			</div>
 		</div>
-		<TravelTime bind:travelTimes {itinerary} />
+		<div class="end">
+			<p>end</p>
+		</div>
 	</div>
-	<div class="end" />
 </section>
 
-<style>
+<style lang="scss">
 	section {
 		margin: 5rem 0;
+		width: 30rem;
+		padding-left: 3rem;
+		padding-right: 0.5rem;
+	}
+	.main {
+		background-color: darken($color2, 15);
+		border-radius: 1rem;
+		box-shadow: 0 0 20px #0002;
 	}
 	.container {
 		display: block;
-		background-image: linear-gradient(0deg, #222 50%, #333 50%);
+		background-image: linear-gradient(0deg, darken($color2, 5) 50%, darken($color2, 10) 50%);
 		background-size: 1px 120px;
-		max-width: 30rem;
+		width: 100%;
 	}
 	.markers {
 		position: relative;
@@ -158,17 +172,29 @@
 		height: 2rem;
 		position: absolute;
 		top: -1rem;
-		left: 0;
+		right: 100%;
 		margin: 0;
 		color: white;
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		padding: 0 1rem;
-		background-color: #111;
-		width: 5rem;
+		color: $color1;
+		width: 2.5rem;
+		background-color: $color5;
+		padding-right: 0.5rem;
+		border-radius: 1rem 0 0 1rem;
 	}
 	.events {
 		position: relative;
+	}
+	.start {
+		padding: 1rem;
+		height: 10rem;
+		border-radius: 1rem 1rem 0 0;
+	}
+	.end {
+		padding: 1rem;
+		height: 10rem;
+		border-radius: 0 0 1rem 1rem;
 	}
 </style>

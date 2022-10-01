@@ -13,23 +13,32 @@
 
 	const onClick = () => {
 		$expandedEvent = event.id;
-	}
+	};
 </script>
 
 {#if event}
 	<article style={`transform: translateY(${start}px); height: ${height}px`}>
-		<p>{event.name}</p>
-		<p>{event.location?.name}</p>
-		<button on:click={onClick}>expand</button>
+		<div class="inner">
+			<p>{event.name}</p>
+			<p>{event.location?.name}</p>
+			<!-- <button on:click={onClick}>expand</button> -->
+		</div>
 	</article>
 {/if}
 
-<style>
+<style lang="scss">
 	article {
 		position: absolute;
 		top: 0;
 		left: 0;
-		background-color: red;
 		width: 100%;
+	}
+	p {
+		margin: 0;
+	}
+	.inner {
+		height: 100%;
+		padding: 1rem;
+		background-color: $color1;
 	}
 </style>
