@@ -39,8 +39,10 @@
 	style={`transform: translateY(${startTime}px); height: ${totalDurationMins}px`}
 >
 	<div class="inner">
-		<p class="time"><strong>{hoursDuration}</strong>h <strong>{minutesDuration}</strong>min</p>
-		<p><strong>{displayDistance}</strong>km</p>
+		<div class="info">
+			<p><strong>{displayDistance}</strong>km</p>
+			<p class="time"><strong>{hoursDuration}</strong>h <strong>{minutesDuration}</strong>min</p>
+		</div>
 	</div>
 </div>
 
@@ -62,8 +64,13 @@
 		width: 100%;
 		height: 100%;
 		display: flex;
-		align-items: center;
+		flex-direction: column;
+		justify-content: center;
 		border-radius: 0.5rem;
+	}
+	.info {
+		display: flex;
+		align-items: center;
 		gap: 1rem;
 	}
 	strong {
