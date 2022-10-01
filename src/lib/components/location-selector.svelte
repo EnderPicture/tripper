@@ -1,11 +1,12 @@
 <script lang="ts">
+	import type { NominatimResponse } from '$lib/api-types/nominatim';
 	import type { PhotonGeocodingResponse } from '$lib/api-types/photon';
 	import type { IEvent } from '$lib/store';
 
 	export let location: IEvent['location'];
 
 	let input = location?.name ?? '';
-	let jsonLocationList: PhotonGeocodingResponse | null = null;
+	let jsonLocationList: NominatimResponse | null = null;
 
 	$: if (input !== '') {
 		location = {
@@ -19,19 +20,19 @@
 	// $: console.log(location);
 
 	const onSearch = () => {
-		fetch(`https://photon.komoot.io/api/?q=${location?.name}`)
+		fetch(`https://nominatim.openstreetmap.org/search?q=${location?.name}&format=json`)
 			.then((res) => res.json())
 			.then((json) => (jsonLocationList = json));
 	};
 
 	const onSelectedLocation = (index: number) => {
-		const selected = jsonLocationList?.features[index];
-		if (selected) {
+		if (jsonLocationList && jsonLocationList[index]) {
+			const selected = jsonLocationList[index];
 			location = {
-				name: selected.properties.name,
+				name: selected.display_name.split(',')[0],
 				cords: {
-					lat: selected.geometry.coordinates[1],
-					lon: selected.geometry.coordinates[0]
+					lat: +selected.lat,
+					lon: +selected.lon
 				}
 			};
 			input = location.name;
@@ -49,12 +50,10 @@
 	{location?.cords?.lon ?? ''}
 	{#if jsonLocationList}
 		<div class="location-list">
-			{#each jsonLocationList.features as feature, index}
+			{#each jsonLocationList as feature, index}
 				<button on:click={() => onSelectedLocation(index)}>
-					{feature.properties.name ?? ''}
-					{feature.properties.city ?? ''}
-					{feature.properties.state ?? ''}
-					{feature.properties.country ?? ''}
+					{feature.type ?? ''}
+					{feature.display_name ?? ''}
 				</button>
 			{/each}
 		</div>
