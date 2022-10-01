@@ -38,6 +38,7 @@
 	:global(*) {
 		box-sizing: border-box;
 		font-family: 'Montserrat', sans-serif;
+		color: $color5;
 	}
 	main {
 		padding-bottom: 15rem;

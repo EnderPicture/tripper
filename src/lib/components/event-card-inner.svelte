@@ -24,8 +24,10 @@
 				<div />
 				<div />
 			</div>
-			<input type="text" bind:value={event.name} size="1" />
-			<button on:click={onExpand}>expand</button>
+			<div class="content">
+				<input type="text" bind:value={event.name} size="1" />
+				<button on:click={onExpand}>expand</button>
+			</div>
 		</div>
 	</article>
 {/if}
@@ -34,44 +36,39 @@
 	article {
 		width: 100%;
 		height: 100%;
-		padding-top: var(--tag-height);
-		--tag-height: 2rem;
 	}
 	.inner {
 		background-color: lighten($color2, 10);
-		padding: 0.5rem;
-		padding-top: 1rem;
 		width: 100%;
 		height: 100%;
 		position: relative;
-		border-radius: .5rem;
-		border-bottom: $color3 5px solid;
-		box-shadow: 0 0 20px #0001;
+		border-radius: 0.5rem;
+		box-shadow: 0 0 20px #0002;
+		overflow: hidden;
+	}
+	.content {
+		padding: 0.5rem;
 	}
 	input {
 		border: none;
-		background-color: #333;
+		background-color: $color2;
 		padding: 0.25rem 0.5rem;
-		color: white;
 		width: 100%;
 	}
 	.drag-tag {
-		width: 3rem;
-		border-radius: .5rem;
-		height: var(--tag-height);
-		background-color: lighten($color3, 10);
 		touch-action: none;
-		position: absolute;
-		bottom: 100%;
-		left: 0;
-		display: grid;
-		grid-template-rows: repeat(3, 1fr);
-		padding: 0.25rem;
-		gap: 0.25rem;
-		transform: translate(-5px, 10px) rotate(-10deg);
+		background-color: darken($color2, 20);
+		width: 100%;
+		height: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 2px;
+		flex-direction: column;
 		> div {
-			border-radius: .5rem;
-			background-color: darken($color3, 10);
+			height: 2px;
+			width: 50%;
+			background-color: darken($color2, 30);
 		}
 	}
 </style>

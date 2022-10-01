@@ -2,10 +2,11 @@
 	import EventCard from '$lib/components/event-card.svelte';
 	import { events, Rating } from '$lib/store';
 	import { uuid } from '$lib/util';
+	import { flip } from 'svelte/animate';
 
 	const onAdd = () => {
 		events.update((events) => {
-			events.push({
+			events.unshift({
 				id: uuid(),
 				name: '',
 				rating: Rating.meh,
@@ -18,12 +19,15 @@
 </script>
 
 <section class="event-tray">
-	<div class="background"></div>
-	<div class="scroll-con">
-		{#each $events as event}
-			<EventCard bind:eventId={event.id} />
-		{/each}
-		<button class="add" on:click={onAdd}>add new event</button>
+	<div class="scroll">
+		<div class="scroll-con">
+			<button class="add" on:click={onAdd}>+</button>
+			{#each $events as event (event.id)}
+				<div class="card" animate:flip={{ duration: 500 }}>
+					<EventCard bind:eventId={event.id} />
+				</div>
+			{/each}
+		</div>
 	</div>
 </section>
 
@@ -31,33 +35,44 @@
 	.event-tray {
 		position: fixed;
 		bottom: 0;
-		left: 0;
+		left: 50%;
+		transform: translateX(-50%);
 		width: 100%;
-		overflow-x: auto;
+		max-width: 50rem;
+
 		height: 18rem;
+		background-color: $color2;
+		border-radius: 1rem 1rem 0 0;
+		box-shadow: 0 0 20px #0002;
+	}
+	.scroll {
+		height: 100%;
+		overflow-x: auto;
 	}
 	.scroll-con {
 		width: fit-content;
 		height: 100%;
-		padding: 0.5rem;
 		display: grid;
 		grid-auto-flow: column;
-		gap: 0.5rem;
-	}
-	.background {
-		position: absolute;
-		bottom: 0;
-		background-color: $color2;
-		width: 100%;
-		height: calc(100% - 2rem);
-		z-index: -1;
-		box-shadow: 0 0 20px #0001;
+		align-items: center;
+		padding: 1rem;
+		gap: 1rem;
+		overflow: hidden;
 	}
 	.add {
 		background-color: $color2;
 		border: none;
-		margin-top: 3rem;
-		color: $color5;
-		border-radius: .5rem;
+		border-radius: 0.5rem;
+		font-size: 5rem;
+		color: $color1;
+		background-color: darken($color2, 10);
+		height: 5rem;
+		width: 5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.card {
+		height: 100%;
 	}
 </style>
