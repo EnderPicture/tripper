@@ -19,8 +19,7 @@
 {#if event}
 	<article style={`transform: translateY(${start}px); height: ${height}px`}>
 		<div class="inner">
-			<p>{event.name}</p>
-			<p>{event.location?.name}</p>
+			<p>{event.name} at {event.location?.name}</p>
 			<!-- <button on:click={onClick}>expand</button> -->
 		</div>
 	</article>
@@ -32,6 +31,7 @@
 		top: 0;
 		left: 0;
 		width: 100%;
+		padding: 0 10px;
 	}
 	p {
 		margin: 0;
@@ -40,5 +40,9 @@
 		height: 100%;
 		padding: 1rem;
 		background-color: $color1;
+		border-radius: 0.5rem;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
 	}
 </style>
