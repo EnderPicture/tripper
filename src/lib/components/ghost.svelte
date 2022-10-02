@@ -113,9 +113,11 @@
 	}
 	@keyframes ghost-in {
 		0% {
+			transform-origin: var(--xCenter) var(--yCenter);
 			transform: translate(calc(-1 * var(--xCenter)), calc(-1 * var(--yCenter))) scale(1);
 		}
 		100% {
+			transform-origin: var(--xCenter) var(--yCenter);
 			transform: translate(calc(-1 * var(--xCenter)), calc(-1 * var(--yCenter))) scale(1.1);
 		}
 	}

@@ -23,6 +23,14 @@
 
 	let travelTimes: ITravelTime[] = [];
 
+	enum OnTopOfType {
+		start,
+		mid,
+		end
+	}
+
+	let onTopOf: OnTopOfType = OnTopOfType.mid;
+
 	$: startTime = itinerary.startTime;
 	$: endTime = itinerary.endTime;
 
@@ -30,7 +38,8 @@
 	$: offsetHours = startTime / MINUTES_HOUR;
 	$: height = (endTime - startTime) * $zoom;
 
-	const onPointerOver = (e: PointerEvent) => {
+	const onPointerOver = (e: PointerEvent, onTopOfCurrent: OnTopOfType) => {
+		onTopOf = onTopOfCurrent;
 		$overDaySlotElement = {
 			slotData: itinerary,
 			element: slotElement
@@ -46,21 +55,52 @@
 				(($draggedEvent.pointerEvent.clientY - $draggedEvent.boundingRect.y) /
 					$draggedEvent.boundingRect.height) *
 				100;
-			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR;
+			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR * $zoom;
 
 			const box = slotElement.getBoundingClientRect();
 			const start = itinerary.startTime + e.clientY - box.y - offsetY;
 			const end = start + MINUTES_HOUR;
 
-			$events[$eIdToI[$draggedEvent.eventId]].plan = {
-				itineraryId: itinerary.id,
-				startTime: start,
-				endTime: end
-			};
-			if (!itinerary.eventIds.find((id) => id === $draggedEvent?.eventId)) {
+			deleteIfExists($draggedEvent.eventId);
+
+			if (onTopOf === OnTopOfType.mid) {
+				$events[$eIdToI[$draggedEvent.eventId]].plan = {
+					itineraryId: itinerary.id,
+					startTime: start,
+					endTime: end
+				};
+
 				itinerary.eventIds.push($draggedEvent.eventId);
 				itinerary = itinerary;
+			} else if (onTopOf === OnTopOfType.start) {
+				$events[$eIdToI[$draggedEvent.eventId]].plan = {
+					itineraryId: itinerary.id,
+					startTime: Infinity,
+					endTime: itinerary.startTime
+				};
+
+				itinerary.startEvent = $draggedEvent.eventId;
+			} else if (onTopOf === OnTopOfType.end) {
+				$events[$eIdToI[$draggedEvent.eventId]].plan = {
+					itineraryId: itinerary.id,
+					startTime: itinerary.endTime,
+					endTime: -Infinity
+				};
+
+				itinerary.endEvent = $draggedEvent.eventId;
 			}
+		}
+	};
+
+	const deleteIfExists = (idToBeDeleted: IEventID) => {
+		let idInList = itinerary.eventIds.findIndex((id) => id === idToBeDeleted);
+		if (idInList >= 0) {
+			itinerary.eventIds.splice(idInList, 1);
+			itinerary = itinerary;
+		} else if (itinerary.startEvent === idToBeDeleted) {
+			itinerary.startEvent = null;
+		} else if (itinerary.endEvent === idToBeDeleted) {
+			itinerary.endEvent = null;
 		}
 	};
 
@@ -115,14 +155,19 @@
 
 <section>
 	<div class="main">
-		<div class="start">
+		<div
+			class="start"
+			on:pointerenter={(e) => onPointerOver(e, OnTopOfType.start)}
+			on:pointerleave={onPointerLeave}
+			on:pointerup={onPointerUp}
+		>
 			<p>start</p>
 			<button on:click={calcTravelTime}>show travel time</button>
 		</div>
 		<div
 			class="container"
 			style={`height: ${height}px`}
-			on:pointerenter={onPointerOver}
+			on:pointerenter={(e) => onPointerOver(e, OnTopOfType.mid)}
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 			bind:this={slotElement}
@@ -141,7 +186,12 @@
 				{/each}
 			</div>
 		</div>
-		<div class="end">
+		<div
+			class="end"
+			on:pointerenter={(e) => onPointerOver(e, OnTopOfType.end)}
+			on:pointerleave={onPointerLeave}
+			on:pointerup={onPointerUp}
+		>
 			<p>end</p>
 		</div>
 	</div>
@@ -183,6 +233,7 @@
 		background-color: $color5;
 		padding-right: 0.5rem;
 		border-radius: 1rem 0 0 1rem;
+		font-weight: bold;
 	}
 	.events {
 		position: relative;

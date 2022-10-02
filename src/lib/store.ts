@@ -49,9 +49,9 @@ export interface IItinerary {
 	id: IItineraryID;
 	startTime: number;
 	endTime: number;
-	startEvent?: IEventID;
+	startEvent: IEventID | null;
 	eventIds: IEventID[];
-	endEvent?: IEventID;
+	endEvent: IEventID | null;
 }
 
 export interface IDaySlotElement {
@@ -65,7 +65,9 @@ export const itineraries = writable<IItinerary[]>([
 		id: uuid(),
 		startTime: 8 * MINUTES_HOUR,
 		endTime: 20 * MINUTES_HOUR,
-		eventIds: []
+		eventIds: [],
+		startEvent: null,
+		endEvent: null,
 	}
 ]);
 
