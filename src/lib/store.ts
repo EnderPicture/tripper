@@ -10,6 +10,12 @@ export enum Rating {
 	must = 3
 }
 
+export enum EventBlockType {
+	start,
+	mid,
+	end
+}
+
 export type IEventID = string;
 export type IItineraryID = string;
 

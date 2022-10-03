@@ -10,7 +10,8 @@
 		type IEvent,
 		type IEventID,
 		type ISimpleEvent,
-		type ITravelTime
+		type ITravelTime,
+		EventBlockType
 	} from '$lib/store';
 	import EventBlock from '$lib/components/event-block.svelte';
 	import { identity } from 'svelte/internal';
@@ -73,7 +74,7 @@
 			} else if (onTopOf === OnTopOfType.start) {
 				$events[$eIdToI[$draggedEvent.eventId]].plan = {
 					itineraryId: itinerary.id,
-					startTime: Infinity,
+					startTime: itinerary.startTime,
 					endTime: itinerary.startTime
 				};
 
@@ -82,7 +83,7 @@
 				$events[$eIdToI[$draggedEvent.eventId]].plan = {
 					itineraryId: itinerary.id,
 					startTime: itinerary.endTime,
-					endTime: -Infinity
+					endTime: itinerary.endTime
 				};
 
 				itinerary.endEvent = $draggedEvent.eventId;
@@ -103,7 +104,12 @@
 	};
 
 	const calcTravelTime = () => {
-		const simpleEvents = itinerary.eventIds
+		const allEventIds = [...itinerary.eventIds];
+
+		if (itinerary.startEvent) allEventIds.push(itinerary.startEvent);
+		if (itinerary.endEvent) allEventIds.push(itinerary.endEvent);
+
+		const simpleEvents = allEventIds
 			.reduce((locTiming, id) => {
 				const event = $events[$eIdToI[id]];
 				if (event.plan) {
@@ -159,8 +165,14 @@
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 		>
-			<p>start</p>
-			<button on:click={calcTravelTime}>show travel time</button>
+			<button on:click={calcTravelTime}>calculate travel time</button>
+			<div class="spacer" />
+			{#if itinerary.startEvent}
+				<EventBlock
+					bind:event={$events[$eIdToI[itinerary.startEvent]]}
+					type={EventBlockType.start}
+				/>
+			{/if}
 		</div>
 		<div
 			class="container"
@@ -172,7 +184,11 @@
 		>
 			<div class="events">
 				{#each itinerary.eventIds as eventId}
-					<EventBlock bind:event={$events[$eIdToI[eventId]]} dayStartTime={itinerary.startTime} />
+					<EventBlock
+						bind:event={$events[$eIdToI[eventId]]}
+						dayStartTime={itinerary.startTime}
+						type={EventBlockType.mid}
+					/>
 				{/each}
 			</div>
 			<TravelTime {itinerary} />
@@ -190,7 +206,10 @@
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 		>
-			<p>end</p>
+			{#if itinerary.endEvent}
+				<EventBlock bind:event={$events[$eIdToI[itinerary.endEvent]]} type={EventBlockType.end} />
+			{/if}
+			<div class="spacer" />
 		</div>
 	</div>
 </section>
@@ -237,13 +256,22 @@
 		position: relative;
 	}
 	.start {
-		padding: 1rem;
+		padding-top: 1rem;
 		height: 10rem;
 		border-radius: 1rem 1rem 0 0;
+		position: relative;
+		display: flex;
+		flex-direction: column;
 	}
 	.end {
-		padding: 1rem;
+		padding-bottom: 1rem;
 		height: 10rem;
 		border-radius: 0 0 1rem 1rem;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+	.spacer {
+		flex: 1;
 	}
 </style>

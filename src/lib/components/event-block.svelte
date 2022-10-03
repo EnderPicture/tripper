@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { expandedEvent, type IEvent } from '$lib/store';
+	import { EventBlockType, expandedEvent, type IEvent } from '$lib/store';
 	import { end_hydrating } from 'svelte/internal';
 
 	export let event: IEvent;
-	export let dayStartTime: number;
+	export let dayStartTime: number | null = null;
+	export let type: EventBlockType;
 
 	$: startTime = event?.plan?.startTime ?? 0;
 	$: endTime = event?.plan?.endTime ?? 0;
 
-	$: start = startTime - dayStartTime;
+	$: start = startTime - (dayStartTime ?? 0);
 	$: height = endTime - startTime;
 
 	const onClick = () => {
@@ -17,19 +18,38 @@
 </script>
 
 {#if event}
-	<article style={`transform: translateY(${start}px); height: ${height}px`}>
-		<div class="inner">
-			<p>{event.name} at {event.location?.name}</p>
-			<!-- <button on:click={onClick}>expand</button> -->
-		</div>
-	</article>
+	{#if type === EventBlockType.mid}
+		<article
+			class="abs"
+			style={`transform: translateY(${start}px); height: ${height}px`}
+			on:click={onClick}
+		>
+			<div class="inner">
+				<p>{event.name} at {event.location?.name}</p>
+			</div>
+		</article>
+	{:else if type === EventBlockType.start}
+		<article class="start" on:click={onClick}>
+			<div class="inner">
+				<p>{event.name} at {event.location?.name}</p>
+			</div>
+		</article>
+	{:else if type === EventBlockType.end}
+		<article class="end" on:click={onClick}>
+			<div class="inner">
+				<p>{event.name} at {event.location?.name}</p>
+			</div>
+		</article>
+	{/if}
 {/if}
 
 <style lang="scss">
-	article {
+	.abs {
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+	article {
 		width: 100%;
 		padding: 0 10px;
 	}
@@ -44,5 +64,13 @@
 		overflow: hidden;
 		display: flex;
 		align-items: center;
+	}
+	.start {
+		bottom: 0;
+		left: 0;
+	}
+	.end {
+		top: 0;
+		left: 0;
 	}
 </style>
