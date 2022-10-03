@@ -52,6 +52,7 @@ export interface IItinerary {
 	startEvent: IEventID | null;
 	eventIds: IEventID[];
 	endEvent: IEventID | null;
+	travelTimes: ITravelTime[] | null;
 }
 
 export interface IDaySlotElement {
@@ -67,7 +68,8 @@ export const itineraries = writable<IItinerary[]>([
 		endTime: 20 * MINUTES_HOUR,
 		eventIds: [],
 		startEvent: null,
-		endEvent: null
+		endEvent: null,
+		travelTimes: null
 	}
 ]);
 

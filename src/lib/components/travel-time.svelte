@@ -3,12 +3,11 @@
 	import { getCenter } from '$lib/util';
 	import TravelTimeBlock from './travel-time-block.svelte';
 
-	export let travelTimes: ITravelTime[];
 	export let itinerary: IItinerary;
 </script>
 
 <div class="travel">
-	{#each travelTimes as travelTime}
+	{#each itinerary.travelTimes ?? [] as travelTime}
 		<TravelTimeBlock {travelTime} {itinerary} />
 	{/each}
 </div>

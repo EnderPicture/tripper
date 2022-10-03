@@ -21,8 +21,6 @@
 	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
 
-	let travelTimes: ITravelTime[] = [];
-
 	enum OnTopOfType {
 		start,
 		mid,
@@ -108,7 +106,7 @@
 		const simpleEvents = itinerary.eventIds
 			.reduce((locTiming, id) => {
 				const event = $events[$eIdToI[id]];
-				if (event.plan !== null) {
+				if (event.plan) {
 					locTiming.push({
 						eventId: event.id,
 						start: event.plan.startTime,
@@ -123,24 +121,26 @@
 
 		const fetchRoute = async (events: ISimpleEvent[]) => {
 			// TODO: use cache if got it
-			travelTimes = [];
+			itinerary.travelTimes = [];
 
 			for (let i = 0; i < events.length - 1; i++) {
 				const eventA = events[i];
 				const eventB = events[i + 1];
 
-				if (eventA.cords !== null && eventB.cords !== null) {
+				if (eventA.cords && eventB.cords) {
 					const res = await fetch(
 						`https://routing.openstreetmap.de/routed-car/route/v1/driving/${eventA.cords.lon},${eventA.cords.lat};${eventB.cords.lon},${eventB.cords.lat}`
 					);
 					const json = (await res.json()) as RouteResponse;
-					travelTimes.push({
-						startEventId: eventA.eventId,
-						endEventId: eventB.eventId,
-						duration: json.routes[0].duration,
-						distance: json.routes[0].distance
-					});
-					travelTimes = travelTimes;
+					if (itinerary.travelTimes) {
+						itinerary.travelTimes.push({
+							startEventId: eventA.eventId,
+							endEventId: eventB.eventId,
+							duration: json.routes[0].duration,
+							distance: json.routes[0].distance
+						});
+						itinerary = itinerary;
+					}
 				}
 
 				await sleep(1000);
@@ -149,8 +149,6 @@
 
 		fetchRoute(simpleEvents);
 	};
-
-	$: console.log(travelTimes);
 </script>
 
 <section>
@@ -177,7 +175,7 @@
 					<EventBlock bind:event={$events[$eIdToI[eventId]]} dayStartTime={itinerary.startTime} />
 				{/each}
 			</div>
-			<TravelTime bind:travelTimes {itinerary} />
+			<TravelTime {itinerary} />
 			<div class="markers">
 				{#each Array(numberOfHours) as _, count}
 					<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>
