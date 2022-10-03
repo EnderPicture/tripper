@@ -67,7 +67,7 @@ export const itineraries = writable<IItinerary[]>([
 		endTime: 20 * MINUTES_HOUR,
 		eventIds: [],
 		startEvent: null,
-		endEvent: null,
+		endEvent: null
 	}
 ]);
 
@@ -105,3 +105,35 @@ itineraries.subscribe((itineraries) => {
 		}, {} as IItineraryIDToIndexMapItem)
 	);
 });
+
+const save = () => {
+	if (browser) {
+		localStorage.setItem('itineraries', JSON.stringify(currentItineraries));
+		localStorage.setItem('events', JSON.stringify(currentEvents));
+	}
+};
+
+let currentEvents: IEvent[];
+let currentItineraries: IItinerary[];
+if (browser) {
+	// loading save data
+	let savedEvents = localStorage.getItem('events');
+	if (savedEvents) {
+		events.set(JSON.parse(savedEvents as string) as IEvent[]);
+	}
+
+	let savedItineraries = localStorage.getItem('itineraries');
+	if (savedItineraries) {
+		itineraries.set(JSON.parse(savedItineraries as string) as IItinerary[]);
+	}
+
+	// save implementation
+	events.subscribe((updatedEvents) => {
+		currentEvents = updatedEvents;
+		save();
+	});
+	itineraries.subscribe((updatedItineraries) => {
+		currentItineraries = updatedItineraries;
+		save();
+	});
+}
