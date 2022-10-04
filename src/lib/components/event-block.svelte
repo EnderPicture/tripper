@@ -22,6 +22,7 @@
 	{#if type === EventBlockType.mid}
 		<article class="abs" style={`transform: translateY(${start}px); height: ${height}px`}>
 			<div class="inner">
+				<div class="duration-display" style={`height: ${height}px`} />
 				<p>{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
@@ -34,6 +35,7 @@
 	{:else if type === EventBlockType.start}
 		<article class="start">
 			<div class="inner">
+				<div class="duration-display" />
 				<p>{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
@@ -42,6 +44,7 @@
 	{:else if type === EventBlockType.end}
 		<article class="end">
 			<div class="inner">
+				<div class="duration-display" />
 				<p>{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
@@ -66,12 +69,21 @@
 	.inner {
 		height: 100%;
 		padding: 1rem;
-		background-color: $color1;
+		background-color: rgba(lighten($color2, 20), 0.5);
 		border-radius: 0.5rem;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
 		position: relative;
+	}
+	.duration-display {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: lighten($color2, 20);
+		z-index: -1;
 	}
 	.spacer {
 		flex: 1;

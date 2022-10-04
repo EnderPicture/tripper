@@ -54,13 +54,14 @@
 		transition: 0.2s ease;
 		padding: 0 60px;
 		width: 100%;
+		pointer-events: none;
 	}
 	p {
 		margin: 0;
 	}
 	.inner {
 		padding: 1rem;
-		background-color: lighten($color2, 10);
+		background-color: rgba(lighten($color2, 10), 0.5);
 		width: 100%;
 		height: 100%;
 		display: flex;
