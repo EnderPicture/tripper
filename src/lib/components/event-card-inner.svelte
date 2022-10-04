@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { events, expandedEvent, draggedEvent, type IEvent, type IEventID } from '$lib/store';
+	import LocationSelector from './location-selector.svelte';
 
 	export let event: IEvent;
 	let thisComp: HTMLElement;
@@ -25,7 +26,8 @@
 				<div />
 			</div>
 			<div class="content">
-				<input type="text" bind:value={event.name} size="1" />
+				<!-- <input type="text" bind:value={event.name} size="1" /> -->
+				<LocationSelector bind:location={event.location} />
 				<button on:click={onExpand}>expand</button>
 			</div>
 		</div>

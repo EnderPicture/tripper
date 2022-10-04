@@ -92,14 +92,16 @@
 	};
 
 	const deleteIfExists = (idToBeDeleted: IEventID) => {
-		let idInList = itinerary.eventIds.findIndex((id) => id === idToBeDeleted);
-		if (idInList >= 0) {
-			itinerary.eventIds.splice(idInList, 1);
+		let indexInList = itinerary.eventIds.findIndex((id) => id === idToBeDeleted);
+		if (indexInList >= 0) {
+			itinerary.eventIds.splice(indexInList, 1);
 			itinerary = itinerary;
 		} else if (itinerary.startEvent === idToBeDeleted) {
 			itinerary.startEvent = null;
+			// TODO: also remove ref itinerary id from the event as well
 		} else if (itinerary.endEvent === idToBeDeleted) {
 			itinerary.endEvent = null;
+			// TODO: also remove ref itinerary id from the event as well
 		}
 	};
 

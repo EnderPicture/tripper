@@ -19,25 +19,27 @@
 
 {#if event}
 	{#if type === EventBlockType.mid}
-		<article
-			class="abs"
-			style={`transform: translateY(${start}px); height: ${height}px`}
-			on:click={onClick}
-		>
+		<article class="abs" style={`transform: translateY(${start}px); height: ${height}px`}>
 			<div class="inner">
-				<p>{event.name} at {event.location?.name}</p>
+				<p>{event.location?.name}</p>
+				<div class="spacer" />
+				<button on:click={onClick}>expand</button>
 			</div>
 		</article>
 	{:else if type === EventBlockType.start}
-		<article class="start" on:click={onClick}>
+		<article class="start">
 			<div class="inner">
-				<p>{event.name} at {event.location?.name}</p>
+				<p>{event.location?.name}</p>
+				<div class="spacer" />
+				<button on:click={onClick}>expand</button>
 			</div>
 		</article>
 	{:else if type === EventBlockType.end}
-		<article class="end" on:click={onClick}>
+		<article class="end">
 			<div class="inner">
-				<p>{event.name} at {event.location?.name}</p>
+				<p>{event.location?.name}</p>
+				<div class="spacer" />
+				<button on:click={onClick}>expand</button>
 			</div>
 		</article>
 	{/if}
@@ -64,6 +66,9 @@
 		overflow: hidden;
 		display: flex;
 		align-items: center;
+	}
+	.spacer {
+		flex: 1;
 	}
 	.start {
 		bottom: 0;
