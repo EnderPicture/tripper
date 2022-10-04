@@ -33,6 +33,12 @@ export interface ITravelTime {
 	distance: number;
 }
 
+export interface IPlan {
+	itineraryId: IItineraryID;
+	startTime: number;
+	endTime: number;
+}
+
 export interface IEvent {
 	id: IEventID;
 	name: string;
@@ -44,11 +50,7 @@ export interface IEvent {
 			lon: number;
 		} | null;
 	} | null;
-	plan: {
-		itineraryId: IItineraryID;
-		startTime: number;
-		endTime: number;
-	} | null;
+	plan: IPlan | null;
 }
 
 export interface IItinerary {

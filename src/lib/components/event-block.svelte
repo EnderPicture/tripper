@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { EventBlockType, expandedEvent, type IEvent } from '$lib/store';
 	import { end_hydrating } from 'svelte/internal';
+	import DragTarget, { DragMode } from './drag-target.svelte';
 
 	export let event: IEvent;
 	export let dayStartTime: number | null = null;
@@ -24,6 +25,10 @@
 				<p>{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
+				{#if event.plan}
+					<DragTarget bind:value={event.plan} mode={DragMode.WholeEvent} />
+					<DragTarget bind:value={event.plan} mode={DragMode.EndTime} />
+				{/if}
 			</div>
 		</article>
 	{:else if type === EventBlockType.start}
@@ -66,6 +71,7 @@
 		overflow: hidden;
 		display: flex;
 		align-items: center;
+		position: relative;
 	}
 	.spacer {
 		flex: 1;

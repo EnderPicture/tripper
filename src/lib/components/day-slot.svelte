@@ -184,6 +184,7 @@
 			on:pointerup={onPointerUp}
 			bind:this={slotElement}
 		>
+			<TravelTime {itinerary} />
 			<div class="events">
 				{#each itinerary.eventIds as eventId}
 					<EventBlock
@@ -193,7 +194,7 @@
 					/>
 				{/each}
 			</div>
-			<TravelTime {itinerary} />
+
 			<div class="markers">
 				{#each Array(numberOfHours) as _, count}
 					<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>
