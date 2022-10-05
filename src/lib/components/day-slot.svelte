@@ -211,11 +211,10 @@
 			<div class="markers">
 				{#each Array(Math.ceil(numberOfHours)) as _, count (calcMarkerValue(count))}
 					{#if isMarkerWituinRange(count)}
-						<p
-							transition:fly={{ duration: 200, x: 10 }}
-							style={`transform: translateY(${count * MINUTES_HOUR * $zoom + exactHourOffset}px)`}
-						>
-							{calcMarkerValue(count)}
+						<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom + exactHourOffset}px)`}>
+							<span transition:fly={{ duration: 200, x: 10 }}>
+								{calcMarkerValue(count)}
+							</span>
 						</p>
 					{/if}
 				{/each}
@@ -256,24 +255,26 @@
 	}
 	.markers {
 		position: relative;
-	}
-	.markers > p {
-		height: 2rem;
-		position: absolute;
-		top: -1rem;
-		right: 100%;
-		margin: 0;
-		color: white;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		color: $color1;
-		width: 2.5rem;
-		background-color: $color5;
-		padding-right: 0.5rem;
-		border-radius: 1rem 0 0 1rem;
-		font-weight: bold;
-		z-index: -1;
+		p {
+			position: absolute;
+			top: -1rem;
+			right: 100%;
+			z-index: -1;
+			margin: 0;
+		}
+		span {
+			height: 2rem;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			color: $color1;
+			width: 2.5rem;
+			background-color: $color5;
+			padding-right: 0.5rem;
+			border-radius: 1rem 0 0 1rem;
+			font-weight: bold;
+		}
 	}
 	.events {
 		position: relative;
