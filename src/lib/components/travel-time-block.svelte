@@ -51,7 +51,6 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		transition: 0.2s ease;
 		padding: 0 60px;
 		width: 100%;
 		pointer-events: none;

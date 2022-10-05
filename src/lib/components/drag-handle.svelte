@@ -57,9 +57,8 @@
 <style lang="scss">
 	.handle {
 		touch-action: none;
-		background-color: $color2;
-		height: 1rem;
-		width: 30%;
+		background-color: darken($color2, 20);
+		height: 2rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -68,19 +67,23 @@
 		> div {
 			height: 2px;
 			width: 60%;
-			background-color: darken($color2, 10);
+			background-color: darken($color2, 30);
 		}
 	}
 	.whole {
 		position: absolute;
 		top: 0;
-		right: 0;
-		border-radius: 0 0 0 0.5rem;
+		left: 50%;
+		width: 60%;
+		transform: translate(-50%, -100%);
+		border-radius: 0.5rem 0.5rem 0 0;
 	}
 	.end {
 		position: absolute;
 		bottom: 0;
-		right: 0;
-		border-radius: 0.5rem 0 0 0;
+		left: 50%;
+		width: 30%;
+		transform: translate(-50%, 100%);
+		border-radius:  0 0 0.5rem 0.5rem;
 	}
 </style>
