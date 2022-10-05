@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { EventBlockType, expandedEvent, type IEvent } from '$lib/store';
 	import { end_hydrating } from 'svelte/internal';
-	import DragHandle, { DragMode } from './drag-handle.svelte';
+	import EventDragHandle, { DragMode } from './event-drag-handle.svelte';
 
 	export let event: IEvent;
 	export let dayStartTime: number | null = null;
@@ -28,8 +28,8 @@
 				<button on:click={onClick}>expand</button>
 			</div>
 			{#if event.plan}
-				<DragHandle bind:value={event.plan} mode={DragMode.WholeEvent} />
-				<DragHandle bind:value={event.plan} mode={DragMode.EndTime} />
+				<EventDragHandle bind:value={event.plan} mode={DragMode.WholeEvent} />
+				<EventDragHandle bind:value={event.plan} mode={DragMode.EndTime} />
 			{/if}
 		</article>
 	{:else if type === EventBlockType.start}

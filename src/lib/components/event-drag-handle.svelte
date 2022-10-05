@@ -1,23 +1,36 @@
+<script lang="ts" context="module">
+	export enum DragMode {
+		WholeEvent,
+		EndTime
+	}
+</script>
+
 <script lang="ts">
-	export let value: number;
-	export let reverse: boolean = false;
+	import type { IPlan } from '$lib/store';
+
+	export let value: IPlan;
+	export let mode: DragMode;
 
 	let pointerDown = false;
 	let pointerY = 0;
-	let oldValue = 0;
+	let oldStart = 0;
+	let oldEnd = 0;
 
 	const onPointerDown = (e: PointerEvent) => {
 		pointerDown = true;
 		pointerY = e.clientY;
-		oldValue = value;
+		oldStart = value.startTime;
+		oldEnd = value.endTime;
 	};
 	const onPointerMove = (e: PointerEvent) => {
 		if (pointerDown) {
-			if (reverse) {
-				value = oldValue + pointerY - e.clientY;
-			} else {
-				value = oldValue + e.clientY - pointerY;
+			value.endTime = oldEnd + e.clientY - pointerY;
+
+			if (mode === DragMode.WholeEvent) {
+				value.startTime = oldStart + e.clientY - pointerY;
 			}
+
+			value.endTime = value.endTime > value.startTime ? value.endTime : value.startTime;
 		}
 	};
 	const onPointerUp = (e: PointerEvent) => {
@@ -30,7 +43,12 @@
 	on:pointermove|preventDefault={onPointerMove}
 />
 
-<div class="handle" on:pointerdown|preventDefault={onPointerDown}>
+<div
+	class="handle"
+	class:whole={mode === DragMode.WholeEvent}
+	class:end={mode === DragMode.EndTime}
+	on:pointerdown|preventDefault={onPointerDown}
+>
 	<div />
 	<div />
 	<div />
@@ -66,6 +84,6 @@
 		left: 50%;
 		width: 30%;
 		transform: translate(-50%, 100%);
-		border-radius: 0 0 0.5rem 0.5rem;
+		border-radius:  0 0 0.5rem 0.5rem;
 	}
 </style>

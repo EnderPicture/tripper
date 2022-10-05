@@ -18,6 +18,8 @@
 	import { sleep } from '$lib/util';
 	import type { RouteResponse } from '$lib/api-types/routing';
 	import TravelTime from './travel-time.svelte';
+	import DragHandle from './drag-handle.svelte';
+	import { fly } from 'svelte/transition';
 
 	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
@@ -36,6 +38,9 @@
 	$: numberOfHours = (endTime - startTime) / MINUTES_HOUR + 1;
 	$: offsetHours = startTime / MINUTES_HOUR;
 	$: height = (endTime - startTime) * $zoom;
+
+	$: exactHourOffset = -(startTime % MINUTES_HOUR) * $zoom;
+	$: backgroundOffset = -(startTime % (MINUTES_HOUR * 2)) * $zoom;
 
 	const onPointerOver = (e: PointerEvent, onTopOfCurrent: OnTopOfType) => {
 		onTopOf = onTopOfCurrent;
@@ -157,6 +162,14 @@
 
 		fetchRoute(simpleEvents);
 	};
+
+	const calcMarkerValue = (count: number) => {
+		return Math.floor(offsetHours) + count;
+	};
+	const isMarkerWituinRange = (count: number) => {
+		const hourInMinutes = calcMarkerValue(count) * MINUTES_HOUR;
+		return itinerary.startTime < hourInMinutes && hourInMinutes < itinerary.endTime;
+	};
 </script>
 
 <section>
@@ -167,6 +180,7 @@
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 		>
+			<DragHandle bind:value={itinerary.startTime} reverse />
 			<button on:click={calcTravelTime}>calculate travel time</button>
 			<div class="spacer" />
 			{#if itinerary.startEvent}
@@ -178,7 +192,7 @@
 		</div>
 		<div
 			class="container"
-			style={`height: ${height}px`}
+			style={`height: ${height}px; background-position: 0 ${backgroundOffset}px`}
 			on:pointerenter={(e) => onPointerOver(e, OnTopOfType.mid)}
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
@@ -195,10 +209,15 @@
 			</div>
 			<TravelTime {itinerary} />
 			<div class="markers">
-				{#each Array(numberOfHours) as _, count}
-					<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom}px)`}>
-						{offsetHours + count}
-					</p>
+				{#each Array(Math.ceil(numberOfHours)) as _, count (calcMarkerValue(count))}
+					{#if isMarkerWituinRange(count)}
+						<p
+							transition:fly={{ duration: 200, x: 10 }}
+							style={`transform: translateY(${count * MINUTES_HOUR * $zoom + exactHourOffset}px)`}
+						>
+							{calcMarkerValue(count)}
+						</p>
+					{/if}
 				{/each}
 			</div>
 		</div>
@@ -212,6 +231,7 @@
 				<EventBlock bind:event={$events[$eIdToI[itinerary.endEvent]]} type={EventBlockType.end} />
 			{/if}
 			<div class="spacer" />
+			<DragHandle bind:value={itinerary.endTime} />
 		</div>
 	</div>
 </section>
@@ -253,6 +273,7 @@
 		padding-right: 0.5rem;
 		border-radius: 1rem 0 0 1rem;
 		font-weight: bold;
+		z-index: -1;
 	}
 	.events {
 		position: relative;
