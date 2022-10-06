@@ -11,7 +11,8 @@
 		type IEventID,
 		type ISimpleEvent,
 		type ITravelTime,
-		EventBlockType
+		EventBlockType,
+		type IPlan
 	} from '$lib/store';
 	import EventBlock from '$lib/components/event-block.svelte';
 	import { identity } from 'svelte/internal';
@@ -41,6 +42,20 @@
 
 	$: exactHourOffset = -(startTime % MINUTES_HOUR) * $zoom;
 	$: backgroundOffset = -(startTime % (MINUTES_HOUR * 2)) * $zoom;
+
+	// auto setting start/end times
+	$: if (itinerary.startEvent) {
+		if ($events[$eIdToI[itinerary.startEvent]].plan) {
+			($events[$eIdToI[itinerary.startEvent]].plan as IPlan).endTime = startTime;
+			($events[$eIdToI[itinerary.startEvent]].plan as IPlan).startTime = startTime;
+		}
+	}
+	$: if (itinerary.endEvent) {
+		if ($events[$eIdToI[itinerary.endEvent]].plan) {
+			($events[$eIdToI[itinerary.endEvent]].plan as IPlan).endTime = endTime;
+			($events[$eIdToI[itinerary.endEvent]].plan as IPlan).startTime = endTime;
+		}
+	}
 
 	const onPointerOver = (e: PointerEvent, onTopOfCurrent: OnTopOfType) => {
 		onTopOf = onTopOfCurrent;

@@ -52,20 +52,4 @@
 			background-color: darken($color2, 30);
 		}
 	}
-	.whole {
-		position: absolute;
-		top: 0;
-		left: 50%;
-		width: 60%;
-		transform: translate(-50%, -100%);
-		border-radius: 0.5rem 0.5rem 0 0;
-	}
-	.end {
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		width: 30%;
-		transform: translate(-50%, 100%);
-		border-radius: 0 0 0.5rem 0.5rem;
-	}
 </style>

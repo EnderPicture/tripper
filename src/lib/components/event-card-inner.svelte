@@ -51,12 +51,12 @@
 	.content {
 		padding: 0.5rem;
 	}
-	input {
-		border: none;
-		background-color: $color2;
-		padding: 0.25rem 0.5rem;
-		width: 100%;
-	}
+	// input {
+	// 	border: none;
+	// 	background-color: $color2;
+	// 	padding: 0.25rem 0.5rem;
+	// 	width: 100%;
+	// }
 	.drag-tag {
 		touch-action: none;
 		background-color: darken($color2, 20);
