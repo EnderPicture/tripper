@@ -21,6 +21,7 @@
 	import TravelTime from './travel-time.svelte';
 	import DragHandle from './drag-handle.svelte';
 	import { fly } from 'svelte/transition';
+	import RimLight from './rim-light.svelte';
 
 	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
@@ -189,6 +190,7 @@
 
 <section>
 	<div class="main">
+		<RimLight />
 		<div
 			class="start"
 			on:pointerenter={(e) => onPointerOver(e, OnTopOfType.start)}
@@ -258,13 +260,14 @@
 		padding-right: 0.5rem;
 	}
 	.main {
-		background-color: darken($color2, 15);
+		background-color: $color1_d6;
 		border-radius: 1rem;
 		box-shadow: 0 0 20px #0002;
+		position: relative;
 	}
 	.container {
 		display: block;
-		background-image: linear-gradient(0deg, darken($color2, 5) 50%, darken($color2, 10) 50%);
+		background-image: linear-gradient(0deg, $color1_d7 50%, $color1_d8 50%);
 		background-size: 1px 120px;
 		width: 100%;
 	}
@@ -283,9 +286,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: flex-end;
-			color: $color1;
 			width: 2.5rem;
-			background-color: $color5;
+			background-color: $color1;
 			padding-right: 0.5rem;
 			border-radius: 1rem 0 0 1rem;
 			font-weight: bold;

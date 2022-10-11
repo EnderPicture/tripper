@@ -3,6 +3,7 @@
 	import { events, Rating } from '$lib/store';
 	import { uuid } from '$lib/util';
 	import { flip } from 'svelte/animate';
+	import RimLight from './rim-light.svelte';
 
 	const onAdd = () => {
 		events.update((events) => {
@@ -19,6 +20,7 @@
 </script>
 
 <section class="event-tray">
+	<RimLight />
 	<div class="scroll">
 		<div class="scroll-con">
 			<button class="add" on:click={onAdd}>+</button>
@@ -41,13 +43,15 @@
 		max-width: 50rem;
 
 		height: 18rem;
-		background-color: $color2;
+		background-color: $color1_d7;
+
 		border-radius: 1rem 1rem 0 0;
 		box-shadow: 0 0 20px #0002;
+		z-index: 10;
 	}
 	.scroll {
 		height: 100%;
-		overflow-x: auto;
+		overflow-x: scroll;
 	}
 	.scroll-con {
 		width: fit-content;
@@ -60,12 +64,11 @@
 		overflow: hidden;
 	}
 	.add {
-		background-color: $color2;
 		border: none;
 		border-radius: 0.5rem;
 		font-size: 5rem;
 		color: $color1;
-		background-color: darken($color2, 10);
+		background-color: $color1_d5;
 		height: 5rem;
 		width: 5rem;
 		display: flex;

@@ -40,12 +40,11 @@
 		height: 100%;
 	}
 	.inner {
-		background-color: lighten($color2, 10);
+		background-color: $color1_d5;
 		width: 100%;
 		height: 100%;
 		position: relative;
 		border-radius: 0.5rem;
-		box-shadow: 0 0 20px #0002;
 		overflow: hidden;
 	}
 	.content {
@@ -59,7 +58,7 @@
 	// }
 	.drag-tag {
 		touch-action: none;
-		background-color: darken($color2, 20);
+		background-color: $color1_d2;
 		width: 100%;
 		height: 2rem;
 		display: flex;
@@ -69,8 +68,9 @@
 		flex-direction: column;
 		> div {
 			height: 2px;
+			border-radius: 100px;
 			width: 50%;
-			background-color: darken($color2, 30);
+			background-color: $color1;
 		}
 	}
 </style>

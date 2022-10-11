@@ -35,15 +35,6 @@
 		left: 0;
 		color: white;
 	}
-	:global(body) {
-		margin: 0;
-		background-color: $color1;
-	}
-	:global(*) {
-		box-sizing: border-box;
-		font-family: 'Montserrat', sans-serif;
-		color: $color5;
-	}
 	main {
 		padding-bottom: 15rem;
 	}

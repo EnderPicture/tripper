@@ -66,11 +66,13 @@
 	}
 	p {
 		margin: 0;
+		font-weight: 900;
+		font-size: 1.1rem;
 	}
 	.inner {
 		height: 100%;
 		padding: 0 1rem;
-		background-color: rgba(lighten($color2, 20), 0.5);
+		background-color: rgba($color2_d3, 0.5);
 		border-radius: 0.5rem;
 		overflow: hidden;
 		display: flex;
@@ -83,7 +85,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: lighten($color2, 20);
+		background-color: $color2_d3;
 		z-index: -1;
 	}
 	.spacer {
@@ -96,5 +98,10 @@
 	.end {
 		top: 0;
 		left: 0;
+	}
+	button {
+		border: none;
+		background-color: $color2_d1;
+		padding: .5rem 1rem;
 	}
 </style>

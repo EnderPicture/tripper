@@ -39,7 +39,7 @@
 <style lang="scss">
 	.handle {
 		touch-action: none;
-		background-color: darken($color2, 20);
+		background-color: $color1_d3;
 		height: 2rem;
 		display: flex;
 		flex-direction: column;
@@ -49,7 +49,7 @@
 		> div {
 			height: 2px;
 			width: 60%;
-			background-color: darken($color2, 30);
+			background-color: $color1_d1;
 		}
 	}
 </style>

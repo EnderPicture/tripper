@@ -52,15 +52,17 @@
 		<div class="location-list">
 			{#each jsonLocationList as feature, index}
 				<button on:click={() => onSelectedLocation(index)}>
-					{feature.type ?? ''}
-					{feature.display_name ?? ''}
+					<p>
+						{feature.type ?? ''}
+						{feature.display_name ?? ''}
+					</p>
 				</button>
 			{/each}
 		</div>
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	.location-input {
 		position: relative;
 	}
@@ -69,11 +71,36 @@
 	}
 	input {
 		flex: 1;
+		padding: .25rem 1rem;
+		font-size: 1rem;
+		background: none;
+		border: none;
+		background-color: $color1_d4;
+		&::placeholder {
+			color: $color1_l3;
+		}
+	}
+	button {
+		padding: .25rem 1rem;
+		font-size: 1rem;
+		background: none;
+		border: none;
+		max-width: 100%;
+		background-color: $color1_d4;
+		p {
+			margin: 0;
+			max-width: 100%;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 	.location-list {
 		position: absolute;
 		top: 100%;
 		left: 0;
 		width: 100%;
+		max-height: 100px;
+		overflow-y: scroll;
 	}
 </style>
