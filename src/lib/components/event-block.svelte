@@ -35,6 +35,7 @@
 			style={`transform: translateY(${start}px); height: ${height}px`}
 			on:pointerenter={() => (pointerIn = true)}
 			on:pointerleave={onPointerLeave}
+			on:pointerdown|stopPropagation
 		>
 			<div class="inner">
 				<div class="duration-display" style={`height: ${height}px`} />

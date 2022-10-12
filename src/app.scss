@@ -3,47 +3,46 @@
 body {
 	margin: 0;
 	background-color: $color1_d9;
-  background-image: radial-gradient($color1_d8 10%, $color1_d9 10%);
-  background-size: 1.5rem 1.5rem;
-  overflow-y: scroll;
+	background-image: radial-gradient($color1_d8 10%, $color1_d9 10%);
+	background-size: 1.5rem 1.5rem;
+	overflow-y: scroll;
 }
 * {
 	box-sizing: border-box;
 	font-family: 'Montserrat', sans-serif;
-	color: $color5_l9 ;
+	color: $color5_l9;
 
+	// firefox
+	scrollbar-width: thin;
+	scrollbar-color: #fff1 #fff1;
 
-  // firefox
-  scrollbar-width: thin;
-  scrollbar-color: #fff1 #fff1;
+	// chrome
+	/* width */
+	&::-webkit-scrollbar {
+		height: 0.5rem;
+		width: 0.5rem;
+	}
+	/* Track */
+	&::-webkit-scrollbar-track {
+		background: #fff1;
+	}
 
-  // chrome
-  /* width */
-  &::-webkit-scrollbar {
-    height: 0.5rem;
-    width: .5rem;
-  }
-  /* Track */
-  &::-webkit-scrollbar-track {
-    background: #fff1;
-  }
+	/* Handle */
+	&::-webkit-scrollbar-thumb {
+		background: #fff1;
+	}
 
-  /* Handle */
-  &::-webkit-scrollbar-thumb {
-    background: #fff1;
-  }
-
-  /* Handle on hover */
-  &::-webkit-scrollbar-thumb:hover {
-    background: #fff2;
-  }
+	/* Handle on hover */
+	&::-webkit-scrollbar-thumb:hover {
+		background: #fff2;
+	}
 }
 
 button {
-  transition: .2s ease;
-  &:hover {
-    transition: .1s ease;
-    opacity: .5;
-    cursor: pointer;
-  }
+	transition: 0.2s ease;
+	&:hover {
+		transition: 0.1s ease;
+		opacity: 0.5;
+		cursor: pointer;
+	}
 }

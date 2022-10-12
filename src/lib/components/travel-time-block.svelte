@@ -51,7 +51,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		padding: 0 6rem;
+		padding: 0 1rem;
 		width: 100%;
 		pointer-events: none;
 	}
@@ -61,7 +61,11 @@
 	.inner {
 		padding: 1rem;
 		background-color: rgba(lighten($color2, 10), 0.2);
-		width: 100%;
+		width: 50%;
+		margin-right: auto;
+		margin-left: auto;
+		width: 15rem;
+		max-width: 100%;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
