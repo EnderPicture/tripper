@@ -24,6 +24,7 @@
 		height: 100%;
 		background-color: #000;
 		opacity: 0.5;
+		z-index: 99;
 	}
 	.event {
 		position: fixed;
@@ -39,5 +40,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+		z-index: 100;
 	}
 </style>

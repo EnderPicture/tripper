@@ -1,14 +1,15 @@
-<div class="rimlight" />
+<div class="rimlight far" />
+<div class="rimlight close" />
 
 <style lang="scss">
 	.rimlight {
 		$border-thickness: 0.5rem;
 		$border-radius: 1rem;
-		$border-color: $color5;
+		--border-color: #{$color4};
 		height: 66%;
 		width: 66%;
-		border-top: solid $border-thickness $border-color;
-		border-right: solid $border-thickness $border-color;
+		border-top: solid $border-thickness var(--border-color);
+		border-right: solid $border-thickness var(--border-color);
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -25,7 +26,7 @@
 			width: $border-thickness;
 			transform: translate(-50%, -100%);
 			border-radius: 100%;
-			background-color: $border-color;
+			background-color: var(--border-color);
 		}
 		&::after {
 			content: '';
@@ -36,7 +37,12 @@
 			width: $border-thickness;
 			transform: translate(100%, 50%);
 			border-radius: 100%;
-			background-color: $border-color;
+			background-color: var(--border-color);
 		}
 	}
+  .close {
+    --border-color: #{$color5};
+    height: 33%;
+		width: 33%;
+  }
 </style>
