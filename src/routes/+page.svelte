@@ -43,6 +43,8 @@
 		position: fixed;
 		right: 0;
 		top: 0;
+		max-width: 500px;
+		max-height: 500px;
 		height: 60vw;
 		width: 60vw;
 		transform: translate(50%, -50%);
