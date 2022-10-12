@@ -11,6 +11,8 @@
 	export let value: IPlan;
 	export let mode: DragMode;
 
+	export let pointerIn: boolean;
+
 	let pointerDown = false;
 	let pointerY = 0;
 	let oldStart = 0;
@@ -47,6 +49,7 @@
 	class="handle"
 	class:whole={mode === DragMode.WholeEvent}
 	class:end={mode === DragMode.EndTime}
+	class:hover={pointerIn || pointerDown}
 	on:pointerdown|preventDefault={onPointerDown}
 >
 	<div />
@@ -64,6 +67,8 @@
 		align-items: center;
 		justify-content: center;
 		gap: 2px;
+		z-index: -2;
+		transition: transform .2s ease;
 		> div {
 			height: 2px;
 			width: 60%;
@@ -75,15 +80,21 @@
 		top: 0;
 		left: 50%;
 		width: 60%;
-		transform: translate(-50%, -100%);
+		transform: translate(-50%, -20%);
 		border-radius: 0.5rem 0.5rem 0 0;
+		&.hover {
+			transform: translate(-50%, -100%);
+		}
 	}
 	.end {
 		position: absolute;
 		bottom: 0;
 		left: 50%;
 		width: 30%;
-		transform: translate(-50%, 100%);
+		transform: translate(-50%, 20%);
 		border-radius:  0 0 0.5rem 0.5rem;
+		&.hover {
+			transform: translate(-50%, 100%);
+		}
 	}
 </style>

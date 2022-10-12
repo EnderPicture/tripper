@@ -16,5 +16,5 @@ export function sleep(ms: number) {
 }
 
 export const getCenter = (start: number, end: number) => {
-	return start + (end - start) / 2;
+	return start / 2 + end / 2;
 };

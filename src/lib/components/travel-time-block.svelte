@@ -51,7 +51,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		padding: 0 60px;
+		padding: 0 6rem;
 		width: 100%;
 		pointer-events: none;
 	}
@@ -60,7 +60,7 @@
 	}
 	.inner {
 		padding: 1rem;
-		background-color: rgba(lighten($color2, 10), 0.5);
+		background-color: rgba(lighten($color2, 10), 0.2);
 		width: 100%;
 		height: 100%;
 		display: flex;

@@ -14,7 +14,7 @@
 
 <style>
 	div {
-		width: 13rem;
+		width: 15rem;
 		height: 100%;
 	}
 	.dragging {

@@ -39,3 +39,11 @@ body {
   }
 }
 
+button {
+  transition: .2s ease;
+  &:hover {
+    transition: .1s ease;
+    opacity: .5;
+    cursor: pointer;
+  }
+}

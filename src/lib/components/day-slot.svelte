@@ -156,20 +156,24 @@
 				const eventA = events[i];
 				const eventB = events[i + 1];
 
+				let duration = -1;
+				let distance = -1;
+
 				if (eventA.cords && eventB.cords) {
 					const res = await fetch(
 						`https://routing.openstreetmap.de/routed-car/route/v1/driving/${eventA.cords.lon},${eventA.cords.lat};${eventB.cords.lon},${eventB.cords.lat}`
 					);
 					const json = (await res.json()) as RouteResponse;
-					if (itinerary.travelTimes) {
-						itinerary.travelTimes.push({
-							startEventId: eventA.eventId,
-							endEventId: eventB.eventId,
-							duration: json.routes[0].duration,
-							distance: json.routes[0].distance
-						});
-						itinerary = itinerary;
-					}
+					(duration = json.routes[0].duration), (distance = json.routes[0].distance);
+				}
+				if (itinerary.travelTimes) {
+					itinerary.travelTimes.push({
+						startEventId: eventA.eventId,
+						endEventId: eventB.eventId,
+						duration,
+						distance
+					});
+					itinerary = itinerary;
 				}
 
 				await sleep(1000);
@@ -198,13 +202,16 @@
 			on:pointerup={onPointerUp}
 		>
 			<DragHandle bind:value={itinerary.startTime} reverse />
-			<button on:click={calcTravelTime}>calculate travel time</button>
+			<button class="travel-time-button" on:click={calcTravelTime}>recalculate travel time</button>
 			<div class="spacer" />
+			<p class="padding starting-title">Starting at:</p>
 			{#if itinerary.startEvent}
 				<EventBlock
 					bind:event={$events[$eIdToI[itinerary.startEvent]]}
 					type={EventBlockType.start}
 				/>
+			{:else}
+				<p class="padding placeholder-block">drop card here for starting point</p>
 			{/if}
 		</div>
 		<div
@@ -243,8 +250,11 @@
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 		>
+			<p class="padding starting-title">Ending at:</p>
 			{#if itinerary.endEvent}
 				<EventBlock bind:event={$events[$eIdToI[itinerary.endEvent]]} type={EventBlockType.end} />
+			{:else}
+				<p class="padding placeholder-block">drop card here for end point</p>
 			{/if}
 			<div class="spacer" />
 			<DragHandle bind:value={itinerary.endTime} />
@@ -297,24 +307,46 @@
 		position: relative;
 	}
 	.start {
-		padding-top: 1rem;
+		overflow: hidden;
+		padding: 0 0 0.5rem;
 		height: 10rem;
 		border-radius: 1rem 1rem 0 0;
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		z-index: 0;
+		background-image: linear-gradient(0deg, $color2_d6, $color1_d6);
 	}
 	.end {
-		padding-bottom: 1rem;
+		overflow: hidden;
+		padding: 0.5rem 0 0;
 		height: 10rem;
 		border-radius: 0 0 1rem 1rem;
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		z-index: 0;
+		background-image: linear-gradient(180deg, $color2_d6, $color1_d6);
 	}
 	.spacer {
 		flex: 1;
+	}
+
+	.padding {
+		padding: 0 1rem;
+	}
+	.starting-title {
+		font-size: 1.2rem;
+		font-weight: 900;
+		margin: 0;
+		margin-bottom: 0.5rem;
+	}
+	.placeholder-block {
+		margin: 0;
+	}
+	.travel-time-button {
+		border: none;
+		background-color: rgba($color1_d4, .25);
+		padding: .5rem 1rem;
 	}
 </style>
