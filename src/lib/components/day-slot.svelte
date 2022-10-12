@@ -226,7 +226,7 @@
 			</div>
 			<TravelTime {itinerary} />
 			<div class="markers">
-				{#each Array(Math.ceil(numberOfHours)) as _, count (calcMarkerValue(count))}
+				{#each Array(Math.max(Math.ceil(numberOfHours), 0)) as _, count (calcMarkerValue(count))}
 					{#if isMarkerWituinRange(count)}
 						<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom + exactHourOffset}px)`}>
 							<span transition:fly={{ duration: 200, x: 10 }}>
