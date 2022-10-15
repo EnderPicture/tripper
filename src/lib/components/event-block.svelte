@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EventBlockType, expandedEvent, type IEvent } from '$lib/store';
+	import { EventBlockType, expandedEvent, UNIX_HOUR, zoom, type IEvent } from '$lib/store';
 	import { end_hydrating } from 'svelte/internal';
 	import EventDragHandle, { DragMode } from './event-drag-handle.svelte';
 
@@ -12,8 +12,8 @@
 	$: startTime = event?.plan?.startTime ?? 0;
 	$: endTime = event?.plan?.endTime ?? 0;
 
-	$: start = startTime - (dayStartTime ?? 0);
-	$: height = endTime - startTime;
+	$: start = ((startTime - (dayStartTime ?? 0)) / UNIX_HOUR) * $zoom;
+	$: height = ((endTime - startTime) / UNIX_HOUR) * $zoom;
 
 	const onClick = () => {
 		$expandedEvent = event.id;

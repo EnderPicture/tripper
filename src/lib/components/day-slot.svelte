@@ -2,7 +2,7 @@
 	import {
 		events,
 		eIdToI,
-		MINUTES_HOUR,
+		UNIX_HOUR,
 		overDaySlotElement,
 		draggedEvent,
 		zoom,
@@ -22,6 +22,7 @@
 	import DragHandle from './drag-handle.svelte';
 	import { fly } from 'svelte/transition';
 	import RimLight from './rim-light.svelte';
+	import dayjs from 'dayjs';
 
 	export let itinerary: IItinerary;
 	let slotElement: HTMLElement;
@@ -37,12 +38,14 @@
 	$: startTime = itinerary.startTime;
 	$: endTime = itinerary.endTime;
 
-	$: numberOfHours = (endTime - startTime) / MINUTES_HOUR + 1;
-	$: offsetHours = startTime / MINUTES_HOUR;
-	$: height = (endTime - startTime) * $zoom;
+	$: startOfday = dayjs.unix(startTime).startOf('day').unix();
 
-	$: exactHourOffset = -(startTime % MINUTES_HOUR) * $zoom;
-	$: backgroundOffset = -(startTime % (MINUTES_HOUR * 2)) * $zoom;
+	$: numberOfHours = (endTime - startTime) / UNIX_HOUR + 1;
+	$: offsetHours = (startTime - startOfday) / UNIX_HOUR;
+	$: height = ((endTime - startTime) / UNIX_HOUR) * $zoom;
+
+	$: exactHourOffset = (-(startTime % UNIX_HOUR) / UNIX_HOUR) * $zoom;
+	$: backgroundOffset = (-(startTime % (UNIX_HOUR * 2)) / UNIX_HOUR) * $zoom;
 
 	// auto setting start/end times
 	$: if (itinerary.startEvent) {
@@ -75,11 +78,11 @@
 				(($draggedEvent.pointerEvent.clientY - $draggedEvent.boundingRect.y) /
 					$draggedEvent.boundingRect.height) *
 				100;
-			const offsetY = (yCenterPercent / 100) * MINUTES_HOUR * $zoom;
+			const offsetY = (yCenterPercent / 100) * $zoom;
 
 			const box = slotElement.getBoundingClientRect();
 			const start = itinerary.startTime + e.clientY - box.y - offsetY;
-			const end = start + MINUTES_HOUR;
+			const end = start + UNIX_HOUR;
 
 			deleteIfExists($draggedEvent.eventId);
 
@@ -187,7 +190,7 @@
 		return Math.floor(offsetHours) + count;
 	};
 	const isMarkerWituinRange = (count: number) => {
-		const hourInMinutes = calcMarkerValue(count) * MINUTES_HOUR;
+		const hourInMinutes = calcMarkerValue(count) * UNIX_HOUR + startOfday;
 		return itinerary.startTime < hourInMinutes && hourInMinutes < itinerary.endTime;
 	};
 </script>
@@ -216,7 +219,11 @@
 		</div>
 		<div
 			class="container"
-			style={`height: ${height}px; background-position: 0 ${backgroundOffset}px`}
+			style={`
+				height: ${height}px;
+				background-position: 0 ${backgroundOffset}px;
+				background-size: 1px ${$zoom * 2}px
+			`}
 			on:pointerenter={(e) => onPointerOver(e, OnTopOfType.mid)}
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
@@ -235,9 +242,9 @@
 			<div class="markers">
 				{#each Array(Math.max(Math.ceil(numberOfHours), 0)) as _, count (calcMarkerValue(count))}
 					{#if isMarkerWituinRange(count)}
-						<p style={`transform: translateY(${count * MINUTES_HOUR * $zoom + exactHourOffset}px)`}>
+						<p style={`transform: translateY(${count * $zoom + exactHourOffset}px)`}>
 							<span transition:fly={{ duration: 200, x: 10 }}>
-								{calcMarkerValue(count)}
+								{dayjs.unix(startOfday).add(calcMarkerValue(count), 'hours').format('h')}
 							</span>
 						</p>
 					{/if}
@@ -346,7 +353,7 @@
 	}
 	.travel-time-button {
 		border: none;
-		background-color: rgba($color1_d4, .25);
-		padding: .5rem 1rem;
+		background-color: rgba($color1_d4, 0.25);
+		padding: 0.5rem 1rem;
 	}
 </style>

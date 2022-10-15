@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-	import type { IPlan } from '$lib/store';
+	import { UNIX_HOUR, zoom, type IPlan } from '$lib/store';
 
 	export let value: IPlan;
 	export let mode: DragMode;
@@ -18,6 +18,8 @@
 	let oldStart = 0;
 	let oldEnd = 0;
 
+	$: console.log(oldStart);
+
 	const onPointerDown = (e: PointerEvent) => {
 		pointerDown = true;
 		pointerY = e.clientY;
@@ -26,11 +28,13 @@
 	};
 	const onPointerMove = (e: PointerEvent) => {
 		if (pointerDown) {
-			value.endTime = oldEnd + e.clientY - pointerY;
+			value.endTime = oldEnd + (e.clientY - pointerY) * UNIX_HOUR / $zoom;
 
 			if (mode === DragMode.WholeEvent) {
-				value.startTime = oldStart + e.clientY - pointerY;
+				value.startTime = oldStart + (e.clientY - pointerY) * UNIX_HOUR / $zoom;
 			}
+
+			console.log(oldStart + e.clientY - pointerY)
 
 			value.endTime = value.endTime > value.startTime ? value.endTime : value.startTime;
 		}
@@ -68,7 +72,7 @@
 		justify-content: center;
 		gap: 2px;
 		z-index: -2;
-		transition: transform .2s ease;
+		transition: transform 0.2s ease;
 		> div {
 			height: 2px;
 			width: 60%;
@@ -92,7 +96,7 @@
 		left: 50%;
 		width: 30%;
 		transform: translate(-50%, 20%);
-		border-radius:  0 0 0.5rem 0.5rem;
+		border-radius: 0 0 0.5rem 0.5rem;
 		&.hover {
 			transform: translate(-50%, 100%);
 		}

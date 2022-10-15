@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {
-		MINUTES_HOUR,
+		UNIX_HOUR,
 		zoom,
 		overDaySlotElement,
 		draggedEvent,
@@ -66,7 +66,7 @@
 		? $overDaySlotElement.element.getBoundingClientRect().width / 1.1
 		: undefined;
 
-	$: ghostHeight = $overDaySlotElement ? (MINUTES_HOUR / 1.1) * $zoom : undefined;
+	$: ghostHeight = $overDaySlotElement ? ($zoom / 1.1) : undefined;
 </script>
 
 <svelte:window

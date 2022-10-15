@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { UNIX_HOUR, zoom } from '$lib/store';
+
 	export let value: number;
 	export let reverse: boolean = false;
 
@@ -14,9 +16,9 @@
 	const onPointerMove = (e: PointerEvent) => {
 		if (pointerDown) {
 			if (reverse) {
-				value = oldValue + pointerY - e.clientY;
+				value = oldValue + ((pointerY - e.clientY) * UNIX_HOUR) / $zoom;
 			} else {
-				value = oldValue + e.clientY - pointerY;
+				value = oldValue + ((e.clientY - pointerY) * UNIX_HOUR) / $zoom;
 			}
 		}
 	};

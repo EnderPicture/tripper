@@ -62,6 +62,7 @@
 		padding: 1rem;
 		gap: 1rem;
 		overflow: hidden;
+		transform: translate3d(0,0,0);
 	}
 	.add {
 		border: none;

@@ -1,8 +1,9 @@
 import { browser } from '$app/environment';
+import dayjs from 'dayjs';
 import { writable } from 'svelte/store';
 import { uuid } from './util';
 
-export const MINUTES_HOUR = 60;
+export const UNIX_HOUR = dayjs.unix(0).add(1, 'hour').unix();
 
 export enum Rating {
 	meh = 1,
@@ -72,8 +73,8 @@ export const events = writable<IEvent[]>([]);
 export const itineraries = writable<IItinerary[]>([
 	{
 		id: uuid(),
-		startTime: 8 * MINUTES_HOUR,
-		endTime: 20 * MINUTES_HOUR,
+		startTime: dayjs().startOf('day').add(8, 'hour').unix(),
+		endTime: dayjs().startOf('day').add(20, 'hour').unix(),
 		eventIds: [],
 		startEvent: null,
 		endEvent: null,
@@ -82,7 +83,7 @@ export const itineraries = writable<IItinerary[]>([
 ]);
 
 export const overDaySlotElement = writable<IDaySlotElement | null>(null);
-export const zoom = writable(1);
+export const zoom = writable(60);
 
 export interface IDraggedEvent {
 	pointerEvent: PointerEvent;
