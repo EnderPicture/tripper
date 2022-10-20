@@ -81,7 +81,7 @@
 			const offsetY = (yCenterPercent / 100) * $zoom;
 
 			const box = slotElement.getBoundingClientRect();
-			const start = itinerary.startTime + e.clientY - box.y - offsetY;
+			const start = itinerary.startTime + (e.clientY - box.y - offsetY) * $zoom;
 			const end = start + UNIX_HOUR;
 
 			deleteIfExists($draggedEvent.eventId);
