@@ -79,6 +79,15 @@ export const itineraries = writable<IItinerary[]>([
 		startEvent: null,
 		endEvent: null,
 		travelTimes: null
+	},
+	{
+		id: uuid(),
+		startTime: dayjs().startOf('day').add(8, 'hour').unix(),
+		endTime: dayjs().startOf('day').add(20, 'hour').unix(),
+		eventIds: [],
+		startEvent: null,
+		endEvent: null,
+		travelTimes: null
 	}
 ]);
 
@@ -117,6 +126,7 @@ itineraries.subscribe((itineraries) => {
 	);
 });
 
+// saving 
 const save = () => {
 	if (browser) {
 		localStorage.setItem('itineraries', JSON.stringify(currentItineraries));

@@ -12,7 +12,8 @@
 		type ISimpleEvent,
 		type ITravelTime,
 		EventBlockType,
-		type IPlan
+		type IPlan,
+		itineraries
 	} from '$lib/store';
 	import EventBlock from '$lib/components/event-block.svelte';
 	import { identity } from 'svelte/internal';
@@ -46,6 +47,17 @@
 
 	$: exactHourOffset = (-(startTime % UNIX_HOUR) / UNIX_HOUR) * $zoom;
 	$: backgroundOffset = (-(startTime % (UNIX_HOUR * 2)) / UNIX_HOUR) * $zoom;
+
+	// offset current dayslot with first dayslot starttime
+	// TODO: calc this once, not in every day slot
+	$: earliestDay = $itineraries.reduce((earliest, it) => {
+		if (!earliest || earliest.startTime > it.startTime) return it;
+		return earliest;
+	}, null as IItinerary | null);
+
+	$: offsetAnchor = earliestDay
+		? ((itinerary.startTime - earliestDay.startTime) / UNIX_HOUR) * $zoom
+		: 0;
 
 	// auto setting start/end times
 	$: if (itinerary.startEvent) {
@@ -116,17 +128,19 @@
 	};
 
 	const deleteIfExists = (idToBeDeleted: IEventID) => {
-		let indexInList = itinerary.eventIds.findIndex((id) => id === idToBeDeleted);
-		if (indexInList >= 0) {
-			itinerary.eventIds.splice(indexInList, 1);
-			itinerary = itinerary;
-		} else if (itinerary.startEvent === idToBeDeleted) {
-			itinerary.startEvent = null;
-			// TODO: also remove ref itinerary id from the event as well
-		} else if (itinerary.endEvent === idToBeDeleted) {
-			itinerary.endEvent = null;
-			// TODO: also remove ref itinerary id from the event as well
-		}
+		$itineraries.forEach((itinerary) => {
+			let indexInList = itinerary.eventIds.findIndex((id) => id === idToBeDeleted);
+			if (indexInList >= 0) {
+				itinerary.eventIds.splice(indexInList, 1);
+				itinerary = itinerary;
+			} else if (itinerary.startEvent === idToBeDeleted) {
+				itinerary.startEvent = null;
+				// TODO: also remove ref itinerary id from the event as well
+			} else if (itinerary.endEvent === idToBeDeleted) {
+				itinerary.endEvent = null;
+				// TODO: also remove ref itinerary id from the event as well
+			}
+		});
 	};
 
 	const calcTravelTime = () => {
@@ -196,7 +210,7 @@
 </script>
 
 <section>
-	<div class="main">
+	<div class="main" style={`transform: translateY(${offsetAnchor}px)`}>
 		<RimLight />
 		<div
 			class="start"
@@ -204,7 +218,7 @@
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 		>
-			<DragHandle bind:value={itinerary.startTime} reverse />
+			<DragHandle bind:value={itinerary.startTime} />
 			<button class="travel-time-button" on:click={calcTravelTime}>recalculate travel time</button>
 			<div class="spacer" />
 			<p class="padding starting-title">Starting at:</p>
