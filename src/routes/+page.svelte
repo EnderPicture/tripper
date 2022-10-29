@@ -7,9 +7,11 @@
 </script>
 
 <main>
-	{#each $itineraries as itinerary}
-		<DaySlot bind:itinerary />
-	{/each}
+	<div class="slots">
+		{#each $itineraries as itinerary}
+			<DaySlot bind:itinerary />
+		{/each}
+	</div>
 
 	<EventTray />
 
@@ -19,9 +21,9 @@
 		<ExpandedEvent bind:event={$events[$eIdToI[$expandedEvent]]} />
 	{/if}
 
-	<!-- <div class="debug">
-		{$draggedEvent}
-	</div> -->
+	<div class="debug">
+		<button on:click={() => localStorage.clear()}>clear all</button>
+	</div>
 	<div class="sun" />
 </main>
 
@@ -35,9 +37,9 @@
 		top: 0;
 		left: 0;
 		color: white;
-	}
-	main {
-		padding-bottom: 15rem;
+		button {
+			color: black;
+		}
 	}
 	.sun {
 		position: fixed;
@@ -70,5 +72,11 @@
 			background-image: radial-gradient(rgba($color5, 0.2) 10%, rgba($color4, 0) 70%);
 			z-index: -1;
 		}
+	}
+	.slots {
+		display: grid;
+		grid-auto-flow: column;
+		width: fit-content;
+		overflow-x: scroll;
 	}
 </style>

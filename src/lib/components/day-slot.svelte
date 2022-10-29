@@ -286,9 +286,11 @@
 <style lang="scss">
 	section {
 		margin: 5rem 0;
-		width: 30rem;
 		padding-left: 3rem;
 		padding-right: 0.5rem;
+		max-width: 95vw;
+		width: 30rem;
+		padding-bottom: 15rem;
 	}
 	.main {
 		background-color: $color1_d6;
