@@ -60,18 +60,21 @@
 		: 0;
 
 	// auto setting start/end times
-	$: if (itinerary.startEvent) {
-		if ($events[$eIdToI[itinerary.startEvent]].plan) {
+	$: startTime, startTimeUpdater();
+	const startTimeUpdater = () => {
+		if (itinerary.startEvent && $events[$eIdToI[itinerary.startEvent]].plan) {
 			($events[$eIdToI[itinerary.startEvent]].plan as IPlan).endTime = startTime;
 			($events[$eIdToI[itinerary.startEvent]].plan as IPlan).startTime = startTime;
 		}
-	}
-	$: if (itinerary.endEvent) {
-		if ($events[$eIdToI[itinerary.endEvent]].plan) {
+	};
+
+	$: endTime, endTimeUpdater();
+	const endTimeUpdater = () => {
+		if (itinerary.endEvent && $events[$eIdToI[itinerary.endEvent]].plan) {
 			($events[$eIdToI[itinerary.endEvent]].plan as IPlan).endTime = endTime;
 			($events[$eIdToI[itinerary.endEvent]].plan as IPlan).startTime = endTime;
 		}
-	}
+	};
 
 	const onPointerOver = (e: PointerEvent, onTopOfCurrent: OnTopOfType) => {
 		onTopOf = onTopOfCurrent;
@@ -221,7 +224,7 @@
 			<DragHandle bind:value={itinerary.startTime} />
 			<button class="travel-time-button" on:click={calcTravelTime}>recalculate travel time</button>
 			<div class="spacer" />
-			<p class="padding starting-title">Starting at:</p>
+			<p class="padding starting-title">Starting at</p>
 			{#if itinerary.startEvent}
 				<EventBlock
 					bind:event={$events[$eIdToI[itinerary.startEvent]]}
@@ -271,12 +274,13 @@
 			on:pointerleave={onPointerLeave}
 			on:pointerup={onPointerUp}
 		>
-			<p class="padding starting-title">Ending at:</p>
 			{#if itinerary.endEvent}
 				<EventBlock bind:event={$events[$eIdToI[itinerary.endEvent]]} type={EventBlockType.end} />
 			{:else}
 				<p class="padding placeholder-block">drop card here for end point</p>
 			{/if}
+			<p class="padding starting-title">Ending at</p>
+
 			<div class="spacer" />
 			<DragHandle bind:value={itinerary.endTime} />
 		</div>
@@ -331,7 +335,6 @@
 	}
 	.start {
 		overflow: hidden;
-		padding: 0 0 0.5rem;
 		height: 10rem;
 		border-radius: 1rem 1rem 0 0;
 		position: relative;
@@ -342,7 +345,6 @@
 	}
 	.end {
 		overflow: hidden;
-		padding: 0.5rem 0 0;
 		height: 10rem;
 		border-radius: 0 0 1rem 1rem;
 		position: relative;
@@ -361,11 +363,11 @@
 	.starting-title {
 		font-size: 1.2rem;
 		font-weight: 900;
-		margin: 0;
-		margin-bottom: 0.5rem;
+		margin: 0.5rem 0;
 	}
 	.placeholder-block {
 		margin: 0;
+		padding: 0.5rem 1rem;
 	}
 	.travel-time-button {
 		border: none;
