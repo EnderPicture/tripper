@@ -1,47 +1,46 @@
 <script lang="ts">
-	import { eIdToI, events, type IItinerary, type ITravelTime } from '$lib/store';
+	import { eIdToI, events, UNIX_HOUR, zoom, type IItinerary, type ITravelTime } from '$lib/store';
 	import { getCenter } from '$lib/util';
+	import dayjs from 'dayjs';
+	import dayjsDuration from 'dayjs/plugin/duration';
+	dayjs.extend(dayjsDuration);
 
 	export let travelTime: ITravelTime;
 	export let itinerary: IItinerary;
 
-	let startTime = 0;
-	let endTime = 0;
-	let totalDurationMins = 0;
+	$: duration = travelTime.duration;
 
-	$: displayDistance = Math.round(travelTime.distance / 1000).toLocaleString();
-
-	$: hoursDuration = Math.floor(totalDurationMins / 60);
-	$: minutesDuration = Math.floor(totalDurationMins % 60);
+	let height = 0;
+	let start = 0;
 
 	$: {
 		const startPlan = $events[$eIdToI[travelTime.startEventId]].plan;
 		const endPlan = $events[$eIdToI[travelTime.endEventId]].plan;
 
-		totalDurationMins = travelTime.duration / 60;
-
-		if (startPlan && endPlan) {
+		if (
+			startPlan &&
+			endPlan &&
+			startPlan.itineraryId === itinerary.id &&
+			endPlan.itineraryId === itinerary.id
+		) {
 			const startFreeTime = startPlan.endTime - itinerary.startTime;
 			const endFreeTime = endPlan.startTime - itinerary.startTime;
 
 			const center = getCenter(startFreeTime, endFreeTime);
-			const half = totalDurationMins / 2;
-			startTime = center - half;
-			endTime = center + half;
 
-			const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
+			height = (duration / UNIX_HOUR) * $zoom;
+			start = ((center - duration / 2) / UNIX_HOUR) * $zoom;
 		}
 	}
 </script>
 
-<div
-	class="travel-block"
-	style={`transform: translateY(${startTime}px); height: ${totalDurationMins}px`}
->
+<div class="travel-block" style={`transform: translateY(${start}px); height: ${height}px`}>
 	<div class="inner">
 		<div class="info">
-			<p><strong>{displayDistance}</strong>km</p>
-			<p class="time"><strong>{hoursDuration}</strong>h <strong>{minutesDuration}</strong>min</p>
+			<p><strong>{travelTime.distance / 1000}</strong>km</p>
+			<p class="time">
+				<strong>{dayjs.duration(duration, 'seconds').format('H[h] m[min]')}</strong>
+			</p>
 		</div>
 	</div>
 </div>
