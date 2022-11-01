@@ -8,7 +8,7 @@
 	let input = location?.name ?? '';
 	let jsonLocationList: NominatimResponse | null = null;
 
-	$: if (input !== '') {
+	$: if (input.trim() !== '') {
 		location = {
 			name: input.trim(),
 			cords: location?.cords ?? null
@@ -20,9 +20,16 @@
 	// $: console.log(location);
 
 	const onSearch = () => {
-		fetch(`https://nominatim.openstreetmap.org/search?q=${location?.name}&format=json`)
-			.then((res) => res.json())
-			.then((json) => (jsonLocationList = json));
+		console.log(location);
+		if (location) {
+			if (location.name !== '') {
+				fetch(`https://nominatim.openstreetmap.org/search?q=${location?.name}&format=json`)
+					.then((res) => res.json())
+					.then((json) => (jsonLocationList = json));
+			}
+		} else {
+			jsonLocationList = null;
+		}
 	};
 
 	const onSelectedLocation = (index: number) => {
@@ -71,7 +78,7 @@
 	}
 	input {
 		flex: 1;
-		padding: .25rem 1rem;
+		padding: 0.25rem 1rem;
 		font-size: 1rem;
 		background: none;
 		border: none;
@@ -81,7 +88,7 @@
 		}
 	}
 	button {
-		padding: .25rem 1rem;
+		padding: 0.25rem 1rem;
 		font-size: 1rem;
 		background: none;
 		border: none;
