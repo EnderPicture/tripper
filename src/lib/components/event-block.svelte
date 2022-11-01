@@ -39,7 +39,7 @@
 		>
 			<div class="inner">
 				<div class="duration-display" style={`height: ${height}px`} />
-				<p>{event.location?.name}</p>
+				<p class="event-name">{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
 			</div>
@@ -52,7 +52,7 @@
 		<article class="start">
 			<div class="inner">
 				<div class="duration-display" />
-				<p>{event.location?.name}</p>
+				<p class="event-name">{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
 			</div>
@@ -61,7 +61,7 @@
 		<article class="end">
 			<div class="inner">
 				<div class="duration-display" />
-				<p>{event.location?.name}</p>
+				<p class="event-name">{event.location?.name}</p>
 				<div class="spacer" />
 				<button on:click={onClick}>expand</button>
 			</div>
@@ -119,5 +119,11 @@
 		border: none;
 		background-color: $color2_d1;
 		padding: 0.5rem 1rem;
+	}
+	.event-name {
+		white-space: nowrap;
+		overflow: hidden;
+		// text-overflow: ellipsis;
+		overflow-x: auto;
 	}
 </style>

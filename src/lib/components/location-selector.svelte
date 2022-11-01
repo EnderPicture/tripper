@@ -17,7 +17,7 @@
 		location = null;
 	}
 
-	// $: console.log(location);
+	$: console.log(jsonLocationList);
 
 	const onSearch = () => {
 		console.log(location);
@@ -36,7 +36,7 @@
 		if (jsonLocationList && jsonLocationList[index]) {
 			const selected = jsonLocationList[index];
 			location = {
-				name: selected.display_name.split(',')[0],
+				name: selected.display_name,
 				cords: {
 					lat: +selected.lat,
 					lon: +selected.lon
@@ -52,29 +52,27 @@
 	<form on:submit|preventDefault={onSearch}>
 		<input type="text" bind:value={input} placeholder="location" size="1" />
 		<button>search</button>
+		{#if jsonLocationList}
+			<div class="location-list">
+				{#each jsonLocationList as feature, index}
+					<button on:click={() => onSelectedLocation(index)}>
+						<p>
+							<!-- {feature.type ?? ''} -->
+							{feature.display_name ?? ''}
+						</p>
+					</button>
+				{/each}
+			</div>
+		{/if}
 	</form>
 	{location?.cords?.lat ?? ''}
 	{location?.cords?.lon ?? ''}
-	{#if jsonLocationList}
-		<div class="location-list">
-			{#each jsonLocationList as feature, index}
-				<button on:click={() => onSelectedLocation(index)}>
-					<p>
-						{feature.type ?? ''}
-						{feature.display_name ?? ''}
-					</p>
-				</button>
-			{/each}
-		</div>
-	{/if}
 </div>
 
 <style lang="scss">
-	.location-input {
-		position: relative;
-	}
 	form {
 		display: flex;
+		position: relative;
 	}
 	input {
 		flex: 1;
@@ -97,9 +95,12 @@
 		p {
 			margin: 0;
 			max-width: 100%;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
+			font-size: 0.8rem;
+			text-align: start;
+			// white-space: nowrap;
+			// overflow: hidden;
+			// text-overflow: ellipsis;
+			// overflow-x: scroll;
 		}
 	}
 	.location-list {
@@ -107,7 +108,14 @@
 		top: 100%;
 		left: 0;
 		width: 100%;
-		max-height: 100px;
+		max-height: 150px;
 		overflow-y: scroll;
+		button {
+			background-color: $color1_d6;
+			&:hover {
+				opacity: 1;
+				background-color: $color1_d7;
+			}
+		}
 	}
 </style>
