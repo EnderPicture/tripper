@@ -37,7 +37,7 @@
 <div class="travel-block" style={`transform: translateY(${start}px); height: ${height}px`}>
 	<div class="inner">
 		<div class="info">
-			<p><strong>{travelTime.distance / 1000}</strong>km</p>
+			<p><strong>{(travelTime.distance / 1000).toFixed(1)}</strong>km</p>
 			<p class="time">
 				<strong>{dayjs.duration(duration, 'seconds').format('H[h] m[min]')}</strong>
 			</p>
